@@ -1,7 +1,7 @@
 # Личный проект «Кексобукинг» [![Build status][travis-image]][travis-url]
 
 * Студент: [Pavel](https://up.htmlacademy.ru/javascript/18/user/977737).
-* Наставник: `Неизвестно`.
+* Наставник: `Мария Наг`.
 
 ---
 
