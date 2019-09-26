@@ -53,8 +53,7 @@
   var getOffers = function (count) {
     var offersList = [];
     for (var i = 0; i < count; i++) {
-      var offer =
-      {
+      var offer = {
         'author': {
           'avatar': 'img/avatars/user' + getPhotoNumber(i) + '.png'
         },
@@ -94,12 +93,16 @@
 
       return pinElement;
     };
-    // adding content to the markup
-    for (var j = 0; j < offersList.length; j++) {
-      fragmentPin.appendChild(createPin(offersList, j));
-    }
 
-    return mapPinsBlock.appendChild(fragmentPin);
+    // adding content to the markup
+    var addOffers = function (array) {
+      for (var j = 0; j < array.length; j++) {
+        fragmentPin.appendChild(createPin(array, j));
+      }
+      return mapPinsBlock.appendChild(fragmentPin);
+    };
+
+    return addOffers(offersList);
   };
 
   getOffers(8);
