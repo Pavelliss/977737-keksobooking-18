@@ -26,28 +26,21 @@
 
   // Creating random array element
   var getRandomElement = function (array) {
-    var number = Infinity;
-    while (number > array.length - 1) {
-      number = Math.floor(Math.random() * 11);
-    }
-    return array[number];
+    var indexElement = Math.round(-0.5 + Math.random() * array.length);
+    return array[indexElement];
   };
   // Creating random array langth
   var getRandomLength = function (array) {
-    var number = Infinity;
-    while (number > array.length - 1) {
-      number = Math.ceil(Math.random() * 10);
-    }
-    return number;
+    return Math.round(0.5 + Math.random() * array.length);
   };
 
   // create a new array from an old random length
-  var createArrayRandomLength = function (oldArray) {
-    var newArray = [];
-    for (var i = 0; i < getRandomLength(oldArray); i++) {
-      newArray.push(oldArray[i]);
+  var createListRandomLength = function (oldList) {
+    var newList = [];
+    for (var i = 0; i < getRandomLength(oldList); i++) {
+      newList.push(oldList[i]);
     }
-    return newArray;
+    return newList;
   };
 
   // add 0 to photo number
@@ -57,9 +50,9 @@
     return n;
   };
 
-  var getOffers = function (quantity) {
+  var getOffers = function (count) {
     var offersList = [];
-    for (var i = 0; i < quantity; i++) {
+    for (var i = 0; i < count; i++) {
       var offer =
       {
         'author': {
@@ -74,7 +67,7 @@
           'guests': getRandomElement(GUESTS),
           'checkin': getRandomElement(CHECKINS),
           'checkout': getRandomElement(CHECKOUTS),
-          'features': createArrayRandomLength(FEATURES),
+          'features': createListRandomLength(FEATURES),
           'description': getRandomElement(DESCRIPTIONS),
           'photos': [
             'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
@@ -90,7 +83,7 @@
       offersList.push(offer);
     }
 
-    // Pin creatig
+    // Pin creating
     var fragmentPin = document.createDocumentFragment();
     var createPin = function (array, index) {
       var pinElement = pinTemplateCont.cloneNode(true);
