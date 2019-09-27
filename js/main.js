@@ -15,8 +15,8 @@
   //   'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
   //   'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
   // ];
-  var LOCATIONS_X = [600, 550, 350, 200, 400, 300, 250, 450];
-  var LOCATIONS_Y = [150, 300, 200, 180, 400, 250, 350, 450];
+  // var LOCATIONS_X = [600, 550, 350, 200, 400, 300, 250, 450];
+  // var LOCATIONS_Y = [150, 300, 200, 180, 400, 250, 350, 450];
 
   var mapBlock = document.querySelector('.map');
   var mapPinsBlock = document.querySelector('.map__pins');
