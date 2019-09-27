@@ -26,7 +26,7 @@
 
   // Creating random array element
   var getRandomElement = function (array) {
-    var indexElement = Math.round(-0.5 + Math.random() * array.length);
+    var indexElement = Math.floor(Math.random() * array.length);
     return array[indexElement];
   };
   // Creating random array langth
@@ -48,6 +48,12 @@
     n++;
     n = '0' + String(n);
     return n;
+  };
+
+  // random number
+  var getRandomNumber = function (min, max) {
+    var number = min + Math.random() * (max + 1 - min);
+    return Math.floor(number);
   };
 
   var getOffers = function (count) {
@@ -76,34 +82,32 @@
         },
         'location': {
           'x': getRandomElement(LOCATIONS_X),
-          'y': getRandomElement(LOCATIONS_Y)
+          'y': getRandomNumber(130, 630)
         }
       };
       offersList.push(offer);
     }
-
+    return offersList;
+  };
     // Pin creating
-    var fragmentPin = document.createDocumentFragment();
-    var createPin = function (array, index) {
-      var pinElement = pinTemplateCont.cloneNode(true);
+  var fragmentPin = document.createDocumentFragment();
+  var createPin = function (array, index) {
+    var pinElement = pinTemplateCont.cloneNode(true);
 
-      pinElement.querySelector('img').src = array[index].author.avatar;
-      pinElement.querySelector('img').alt = array[index].offer.title;
-      pinElement.querySelector('.map__pin').style = array[index].offer.address;
+    pinElement.querySelector('img').src = array[index].author.avatar;
+    pinElement.querySelector('img').alt = array[index].offer.title;
+    pinElement.querySelector('.map__pin').style = array[index].offer.address;
 
-      return pinElement;
-    };
-
-    // adding content to the markup
-    var addOffers = function (array) {
-      for (var j = 0; j < array.length; j++) {
-        fragmentPin.appendChild(createPin(array, j));
-      }
-      return mapPinsBlock.appendChild(fragmentPin);
-    };
-
-    return addOffers(offersList);
+    return pinElement;
   };
 
-  getOffers(8);
+  // adding content to the markup
+  var addOffers = function (array) {
+    for (var j = 0; j < array.length; j++) {
+      fragmentPin.appendChild(createPin(array, j));
+    }
+    return mapPinsBlock.appendChild(fragmentPin);
+  };
+
+  addOffers(getOffers(8));
 })();
