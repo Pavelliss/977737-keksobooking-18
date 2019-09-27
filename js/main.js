@@ -65,7 +65,7 @@
         },
         'offer': {
           'title': 'заголовок предложения',
-          'address': 'left: ' + LOCATIONS_X[i] + 'px; top: ' + LOCATIONS_Y[i] + 'px',
+          'address': 'left: ' + getRandomNumber(0, 1200) + 'px; top: ' + getRandomNumber(130, 630) + 'px',
           'price': getRandomElement(PRICES),
           'type': getRandomElement(TYPES),
           'rooms': getRandomElement(ROOMS),
@@ -81,7 +81,7 @@
           ]
         },
         'location': {
-          'x': getRandomElement(LOCATIONS_X),
+          'x': getRandomNumber(50, 1150),
           'y': getRandomNumber(130, 630)
         }
       };
