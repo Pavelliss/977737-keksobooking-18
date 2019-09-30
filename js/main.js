@@ -1,7 +1,6 @@
 'use strict';
 (function () {
   // Test date
-  // var ADDRESS = '600, 350';
   var PRICES = [100, 150, 200, 250, 300, 350, 400, 450];
   var TYPES = ['palace', 'flat', 'house', 'bungalo'];
   var ROOMS = [2, 3, 1];
@@ -10,13 +9,11 @@
   var CHECKOUTS = ['12:00', '13:00', '14:00'];
   var FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
   var DESCRIPTIONS = ['text1', 'text2', 'text3', 'text4', 'text5', 'text6', 'text7', 'text8'];
-  // var PHOTOS = [
-  //   'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
-  //   'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
-  //   'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
-  // ];
-  // var LOCATIONS_X = [600, 550, 350, 200, 400, 300, 250, 450];
-  // var LOCATIONS_Y = [150, 300, 200, 180, 400, 250, 350, 450];
+  var PHOTOS = [
+    'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
+    'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
+    'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
+  ];
 
   var mapBlock = document.querySelector('.map');
   var mapPinsBlock = document.querySelector('.map__pins');
@@ -43,13 +40,6 @@
     return newList;
   };
 
-  // add 0 to photo number
-  var getPhotoNumber = function (n) {
-    n++;
-    n = '0' + String(n);
-    return n;
-  };
-
   // random number
   var getRandomNumber = function (min, max) {
     var number = min + Math.random() * (max + 1 - min);
@@ -61,11 +51,11 @@
     for (var i = 0; i < count; i++) {
       var offer = {
         'author': {
-          'avatar': 'img/avatars/user' + getPhotoNumber(i) + '.png'
+          'avatar': 'img/avatars/user0' + (i + 1) + '.png'
         },
         'offer': {
           'title': 'заголовок предложения',
-          'address': 'left: ' + getRandomNumber(0, 1200) + 'px; top: ' + getRandomNumber(130, 630) + 'px',
+          'address': 'x: ' + getRandomNumber(0, 1200) + '; y: ' + getRandomNumber(130, 630),
           'price': getRandomElement(PRICES),
           'type': getRandomElement(TYPES),
           'rooms': getRandomElement(ROOMS),
@@ -74,15 +64,11 @@
           'checkout': getRandomElement(CHECKOUTS),
           'features': createListRandomLength(FEATURES),
           'description': getRandomElement(DESCRIPTIONS),
-          'photos': [
-            'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
-            'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
-            'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
-          ]
+          'photos': createListRandomLength(PHOTOS)
         },
         'location': {
-          'x': getRandomNumber(50, 1150),
-          'y': getRandomNumber(130, 630)
+          'x': 'left: ' + getRandomNumber(50, 1150) + 'px;',
+          'y': 'top: ' + getRandomNumber(130, 630) + 'px;'
         }
       };
       offersList.push(offer);
@@ -96,7 +82,7 @@
 
     pinElement.querySelector('img').src = array[index].author.avatar;
     pinElement.querySelector('img').alt = array[index].offer.title;
-    pinElement.querySelector('.map__pin').style = array[index].offer.address;
+    pinElement.querySelector('.map__pin').style = array[index].location.x + array[index].location.y;
 
     return pinElement;
   };
