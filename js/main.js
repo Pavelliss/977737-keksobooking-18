@@ -1,8 +1,12 @@
 'use strict';
 (function () {
   // Test date
-  var PIN_WIDTH = 50;
-  var MAP_WIDTH = 1200;
+  var mapBlock = document.querySelector('.map');
+  var mapPinsBlock = document.querySelector('.map__pins');
+  var pinTemplateCont = document.querySelector('#pin').content;
+
+  var PIN_WIDTH = document.querySelector('.map__pin').offsetWidth;
+  var MAP_WIDTH = mapPinsBlock.offsetWidth;
   var PRICES = [100, 150, 200, 250, 300, 350, 400, 450];
   var TYPES = ['palace', 'flat', 'house', 'bungalo'];
   var ROOMS = [2, 3, 1];
@@ -17,9 +21,6 @@
     'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
   ];
 
-  var mapBlock = document.querySelector('.map');
-  var mapPinsBlock = document.querySelector('.map__pins');
-  var pinTemplateCont = document.querySelector('#pin').content;
 
   mapBlock.classList.remove('map--faded');
 
@@ -33,7 +34,7 @@
     return Math.round(0.5 + Math.random() * array.length);
   };
 
-  // create a new array from an old random length
+  // create a new list of random length from the old list
   var createListRandomLength = function (oldList) {
     var newList = [];
     for (var i = 0; i < getRandomLength(oldList); i++) {
@@ -51,13 +52,15 @@
   var getOffers = function (count) {
     var offersList = [];
     for (var i = 0; i < count; i++) {
+      var locationX = getRandomNumber(PIN_WIDTH, MAP_WIDTH - PIN_WIDTH);
+      var locationY = getRandomNumber(130, 630);
       var offer = {
         'author': {
           'avatar': 'img/avatars/user0' + (i + 1) + '.png'
         },
         'offer': {
           'title': 'заголовок предложения',
-          'address': 'x: ' + getRandomNumber(0, 1200) + '; y: ' + getRandomNumber(130, 630),
+          'address': 'x: ' + locationX + '; y: ' + locationY,
           'price': getRandomElement(PRICES),
           'type': getRandomElement(TYPES),
           'rooms': getRandomElement(ROOMS),
@@ -69,8 +72,8 @@
           'photos': createListRandomLength(PHOTOS)
         },
         'location': {
-          'x': getRandomNumber(PIN_WIDTH, MAP_WIDTH - PIN_WIDTH),
-          'y': getRandomNumber(130, 630)
+          'x': locationX,
+          'y': locationY
         }
       };
       offersList.push(offer);
