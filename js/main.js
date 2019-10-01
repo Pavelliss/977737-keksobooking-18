@@ -1,6 +1,8 @@
 'use strict';
 (function () {
   // Test date
+  var PIN_WIDTH = 50;
+  var MAP_WIDTH = 1200;
   var PRICES = [100, 150, 200, 250, 300, 350, 400, 450];
   var TYPES = ['palace', 'flat', 'house', 'bungalo'];
   var ROOMS = [2, 3, 1];
@@ -67,8 +69,8 @@
           'photos': createListRandomLength(PHOTOS)
         },
         'location': {
-          'x': 'left: ' + getRandomNumber(50, 1150) + 'px;',
-          'y': 'top: ' + getRandomNumber(130, 630) + 'px;'
+          'x': getRandomNumber(PIN_WIDTH, MAP_WIDTH - PIN_WIDTH),
+          'y': getRandomNumber(130, 630)
         }
       };
       offersList.push(offer);
@@ -82,15 +84,16 @@
 
     pinElement.querySelector('img').src = array[index].author.avatar;
     pinElement.querySelector('img').alt = array[index].offer.title;
-    pinElement.querySelector('.map__pin').style = array[index].location.x + array[index].location.y;
+    pinElement.querySelector('.map__pin').style =
+     'left: ' + array[index].location.x + 'px; ' + 'top: ' + array[index].location.y + 'px;';
 
     return pinElement;
   };
 
   // adding content to the markup
   var addOffers = function (array) {
-    for (var j = 0; j < array.length; j++) {
-      fragmentPin.appendChild(createPin(array, j));
+    for (var i = 0; i < array.length; i++) {
+      fragmentPin.appendChild(createPin(array, i));
     }
     return mapPinsBlock.appendChild(fragmentPin);
   };
