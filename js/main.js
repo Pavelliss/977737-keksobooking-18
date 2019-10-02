@@ -102,7 +102,6 @@
 
   addOffers(getOffers(8));
   var KEYCODE_ENTER = 13;
-  // var KEYCODE_ESC = 27;
   var PIN_WIDTH = 65;
   var PIN_HEIGHT = 65;
   var END_PIN_HEIGHT = 22;
