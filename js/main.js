@@ -189,53 +189,46 @@
     }
   });
 
-  // selectRoomNumber.addEventListener('change', function () {
-  //   if (selectRoomNumber.value === '1') {
+  optionsCapacitys[0].removeAttribute('selected');
+  optionsCapacitys[2].removeAttribute('selected');
+  optionsCapacitys[3].removeAttribute('selected');
 
-  //     optionsCapacitys[0].classList.add('hidden');
-  //     optionsCapacitys[1].classList.add('hidden');
-  //     optionsCapacitys[3].classList.add('hidden');
+  optionsCapacitys[2].setAttribute('selected', 'selected');
 
-  //     optionsCapacitys[0].removeAttribute('selected');
-  //     optionsCapacitys[2].setAttribute('selected', 'selected');
-  //   } else {
-  //     optionsCapacitys[0].classList.remove('hidden');
-  //     optionsCapacitys[1].classList.remove('hidden');
-  //     optionsCapacitys[3].classList.remove('hidden');
-
-  //     optionsCapacitys[2].removeAttribute('selected');
-  //     optionsCapacitys[0].setAttribute('selected', 'selected');
-  //   }
-  // });
-
-  var testArray = [0, 1, 3];
-
-  var togleClassesCapacity = function (roomValue) {
-    if (selectRoomNumber.value === roomValue) {
-      for (var i = 0; i < testArray.length; i++) {
-        optionsCapacitys[testArray[i]].classList.add('hidden');
-      }
-    } else {
-      for (var j = 0; j < testArray.length; j++) {
-        optionsCapacitys[testArray[j]].classList.remove('hidden');
-      }
-    }
-  };
-
-  var togleSelectedCapacity = function () {
-    if (selectRoomNumber.value === '100') {
-      optionsCapacitys[2].removeAttribute('selected');
-      optionsCapacitys[3].setAttribute('selected', 'selected');
-    } else {
-      optionsCapacitys[3].removeAttribute('selected');
-      optionsCapacitys[2].setAttribute('selected', 'selected');
-    }
-  };
 
   selectRoomNumber.addEventListener('change', function () {
-    togleClassesCapacity('1');
-    togleSelectedCapacity();
+    if (selectRoomNumber.value === '1') {
+      optionsCapacitys[0].setAttribute('disabled', 'disabled');
+      optionsCapacitys[1].setAttribute('disabled', 'disabled');
+      optionsCapacitys[3].setAttribute('disabled', 'disabled');
+
+      optionsCapacitys[0].removeAttribute('selected');
+      optionsCapacitys[3].removeAttribute('selected');
+
+      optionsCapacitys[2].setAttribute('selected', 'selected');
+    } else if (selectRoomNumber.value === '2') {
+      optionsCapacitys[0].setAttribute('disabled', 'disabled');
+      optionsCapacitys[3].setAttribute('disabled', 'disabled');
+
+      optionsCapacitys[1].removeAttribute('disabled');
+      optionsCapacitys[2].removeAttribute('disabled');
+    } else if (selectRoomNumber.value === '3') {
+      optionsCapacitys[3].setAttribute('disabled', 'disabled');
+
+      optionsCapacitys[1].removeAttribute('disabled');
+      optionsCapacitys[2].removeAttribute('disabled');
+      optionsCapacitys[0].removeAttribute('disabled');
+    } else if (selectRoomNumber.value === '100') {
+      optionsCapacitys[0].setAttribute('disabled', 'disabled');
+      optionsCapacitys[1].setAttribute('disabled', 'disabled');
+      optionsCapacitys[2].setAttribute('disabled', 'disabled');
+
+      optionsCapacitys[3].removeAttribute('disabled');
+
+      optionsCapacitys[0].removeAttribute('selected');
+      optionsCapacitys[1].removeAttribute('selected');
+      optionsCapacitys[2].removeAttribute('selected');
+      optionsCapacitys[3].setAttribute('selected', 'selected');
+    }
   });
-
-
 })();
