@@ -52,7 +52,7 @@
   var getOffers = function (count) {
     var offersList = [];
     for (var i = 0; i < count; i++) {
-      var locationX = getRandomNumber(PIN_WIDTH, MAP_WIDTH - PIN_WIDTH);
+      var locationX = getRandomNumber(0 + PIN_WIDTH / 2, MAP_WIDTH - PIN_WIDTH / 2);
       var locationY = getRandomNumber(130, 630);
       var offer = {
         'author': {
