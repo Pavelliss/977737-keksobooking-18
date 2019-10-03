@@ -5,7 +5,6 @@
   var mapPinsBlock = document.querySelector('.map__pins');
   var pinTemplateCont = document.querySelector('#pin').content;
 
-  var PIN_WIDTH = document.querySelector('.map__pin').offsetWidth;
   var MAP_WIDTH = mapPinsBlock.offsetWidth;
   var PRICES = [100, 150, 200, 250, 300, 350, 400, 450];
   var TYPES = ['palace', 'flat', 'house', 'bungalo'];
@@ -52,7 +51,7 @@
   var getOffers = function (count) {
     var offersList = [];
     for (var i = 0; i < count; i++) {
-      var locationX = getRandomNumber(0 + PIN_WIDTH / 2, MAP_WIDTH - PIN_WIDTH / 2);
+      var locationX = getRandomNumber(0, MAP_WIDTH);
       var locationY = getRandomNumber(130, 630);
       var offer = {
         'author': {
