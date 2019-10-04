@@ -1,7 +1,6 @@
 'use strict';
 // Test date
 (function () {
-  var mapBlock = document.querySelector('.map');
   var mapPinsBlock = document.querySelector('.map__pins');
   var pinTemplateCont = document.querySelector('#pin').content;
 
