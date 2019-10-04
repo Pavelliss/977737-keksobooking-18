@@ -105,6 +105,13 @@
   var PIN_WIDTH = 65;
   var PIN_HEIGHT = 65;
   var END_PIN_HEIGHT = 22;
+  var ROOM_PRICES = {
+    'bungalo': '0',
+    'flat': '1000',
+    'house': '5000',
+    'palace': '10000'
+  };
+  var TIME_LIST = ['12:00', '13:00', '14:00'];
 
   var map = document.querySelector('.map');
   var mapPinMain = document.querySelector('.map__pin--main');
@@ -113,7 +120,7 @@
   var inputPrice = adForm.querySelector('#price');
   var selectTypeHose = adForm.querySelector('#type');
   var selectTimein = adForm.querySelector('#timein');
-  var selectTimeOut = adForm.querySelector('#timeout');
+  var selectTimeout = adForm.querySelector('#timeout');
   var selectRoomNumber = adForm.querySelector('#room_number');
   var selectCapacity = adForm.querySelector('#capacity');
   var optionsCapacitys = selectCapacity.querySelectorAll('option');
@@ -152,40 +159,35 @@
     }
   });
 
-  // Add value adress
+  var changeMinPrice = function (objRooms) {
+    var roomTypsList = Object.keys(objRooms);
+    for (var i = 0; i < roomTypsList.length; i++) {
+      if (selectTypeHose.value === roomTypsList[i]) {
+        inputPrice.min = objRooms[roomTypsList[i]];
+      }
+    }
+  };
+
+  var changeTime = function (timeList, checkElement, changeElement) {
+    for (var i = 0; i < timeList.length; i++) {
+      if (checkElement.value === timeList[i]) {
+        changeElement.value = timeList[i];
+      }
+    }
+  };
+
   adFormAddress.value = getAddressValue(PIN_WIDTH / 2, PIN_HEIGHT / 2);
 
-  // input price
   selectTypeHose.addEventListener('change', function () {
-    if (selectTypeHose.value === 'flat') {
-      inputPrice.min = '1000';
-    } else if (selectTypeHose.value === 'house') {
-      inputPrice.min = '5000';
-    } else if (selectTypeHose.value === 'palace') {
-      inputPrice.min = '10000';
-    } else {
-      inputPrice.min = 0;
-    }
+    changeMinPrice(ROOM_PRICES);
   });
 
   selectTimein.addEventListener('change', function () {
-    if (selectTimein.value === '12:00') {
-      selectTimeOut.value = '12:00';
-    } else if (selectTimein.value === '13:00') {
-      selectTimeOut.value = '13:00';
-    } else if (selectTimein.value === '14:00') {
-      selectTimeOut.value = '14:00';
-    }
+    changeTime(TIME_LIST, selectTimein, selectTimeout);
   });
 
-  selectTimeOut.addEventListener('change', function () {
-    if (selectTimeOut.value === '12:00') {
-      selectTimein.value = '12:00';
-    } else if (selectTimeOut.value === '13:00') {
-      selectTimein.value = '13:00';
-    } else if (selectTimeOut.value === '14:00') {
-      selectTimein.value = '14:00';
-    }
+  selectTimeout.addEventListener('change', function () {
+    changeTime(TIME_LIST, selectTimeout, selectTimein);
   });
 
   optionsCapacitys[0].removeAttribute('selected');
@@ -194,40 +196,62 @@
 
   optionsCapacitys[2].setAttribute('selected', 'selected');
 
+  var setAttributeDisabled = {
+    '1': [0, 1, 3],
+    '2': [0, 3],
+    '3': [3],
+    '100': [0, 1, 2]
+  };
+
+  var setAttributeSelected = {
+    '1': [2],
+    '2': [2],
+    '3': [2],
+    '100': [3]
+  };
+
+  var removeAttributeDisabled = {
+    '1': [2],
+    '2': [1, 2],
+    '3': [0, 1, 2],
+    '100': [3]
+  };
+
+  var removeAttributeSelected = {
+    '1': [0, 1, 3],
+    '2': [0, 1, 3],
+    '3': [0, 1, 3],
+    '100': [0, 1, 2]
+  };
+
+  var addAttribute = function (objAttributes, attribute) {
+    var keysList = Object.keys(objAttributes); // ['1', '2', '3', '100']
+    for (var i = 0; i < keysList.length; i++) {
+      if (selectRoomNumber.value === keysList[i]) { // '1'
+        var elementList = objAttributes[keysList[i]]; // [0, 1, 3]
+        for (var j = 0; j < elementList.length; j++) {
+          optionsCapacitys[elementList[j]].setAttribute(attribute, attribute);
+        }
+      }
+    }
+  };
+
+  var removeAttribute = function (objAttributes, attribute) {
+    var keysList = Object.keys(objAttributes); // ['1', '2', '3', '100']
+    for (var i = 0; i < keysList.length; i++) {
+      if (selectRoomNumber.value === keysList[i]) { // '1'
+        var elementList = objAttributes[keysList[i]]; // [0, 1, 3]
+        for (var j = 0; j < elementList.length; j++) {
+          optionsCapacitys[elementList[j]].removeAttribute(attribute);
+        }
+      }
+    }
+  };
 
   selectRoomNumber.addEventListener('change', function () {
-    if (selectRoomNumber.value === '1') {
-      optionsCapacitys[0].setAttribute('disabled', 'disabled');
-      optionsCapacitys[1].setAttribute('disabled', 'disabled');
-      optionsCapacitys[3].setAttribute('disabled', 'disabled');
-
-      optionsCapacitys[0].removeAttribute('selected');
-      optionsCapacitys[3].removeAttribute('selected');
-
-      optionsCapacitys[2].setAttribute('selected', 'selected');
-    } else if (selectRoomNumber.value === '2') {
-      optionsCapacitys[0].setAttribute('disabled', 'disabled');
-      optionsCapacitys[3].setAttribute('disabled', 'disabled');
-
-      optionsCapacitys[1].removeAttribute('disabled');
-      optionsCapacitys[2].removeAttribute('disabled');
-    } else if (selectRoomNumber.value === '3') {
-      optionsCapacitys[3].setAttribute('disabled', 'disabled');
-
-      optionsCapacitys[1].removeAttribute('disabled');
-      optionsCapacitys[2].removeAttribute('disabled');
-      optionsCapacitys[0].removeAttribute('disabled');
-    } else if (selectRoomNumber.value === '100') {
-      optionsCapacitys[0].setAttribute('disabled', 'disabled');
-      optionsCapacitys[1].setAttribute('disabled', 'disabled');
-      optionsCapacitys[2].setAttribute('disabled', 'disabled');
-
-      optionsCapacitys[3].removeAttribute('disabled');
-
-      optionsCapacitys[0].removeAttribute('selected');
-      optionsCapacitys[1].removeAttribute('selected');
-      optionsCapacitys[2].removeAttribute('selected');
-      optionsCapacitys[3].setAttribute('selected', 'selected');
-    }
+    addAttribute(setAttributeDisabled, 'disabled');
+    addAttribute(setAttributeSelected, 'selected');
+    removeAttribute(removeAttributeDisabled, 'disabled');
+    removeAttribute(removeAttributeSelected, 'selected');
   });
 })();
