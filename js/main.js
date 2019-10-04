@@ -1,6 +1,6 @@
 'use strict';
+// Test date
 (function () {
-  // Test date
   var mapBlock = document.querySelector('.map');
   var mapPinsBlock = document.querySelector('.map__pins');
   var pinTemplateCont = document.querySelector('#pin').content;
@@ -20,14 +20,12 @@
     'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
   ];
 
-
-  mapBlock.classList.remove('map--faded');
-
   // Creating random array element
   var getRandomElement = function (array) {
     var indexElement = Math.floor(Math.random() * array.length);
     return array[indexElement];
   };
+
   // Creating random array langth
   var getRandomLength = function (array) {
     return Math.round(0.5 + Math.random() * array.length);
@@ -79,7 +77,7 @@
     }
     return offersList;
   };
-    // Pin creating
+  // Pin creating
   var fragmentPin = document.createDocumentFragment();
   var createPin = function (array, index) {
     var pinElement = pinTemplateCont.cloneNode(true);
@@ -100,7 +98,8 @@
     return mapPinsBlock.appendChild(fragmentPin);
   };
 
-  addOffers(getOffers(8));
+  // MODULE 4
+
   var KEYCODE_ENTER = 13;
   var PIN_WIDTH = 65;
   var PIN_HEIGHT = 65;
@@ -112,6 +111,30 @@
     'palace': '10000'
   };
   var TIME_LIST = ['12:00', '13:00', '14:00'];
+  var SET_ATTRIBUTE_DISABLED = {
+    '1': [0, 1, 3],
+    '2': [0, 3],
+    '3': [3],
+    '100': [0, 1, 2]
+  };
+  var SET_ATTRIBUTE_SELECTED = {
+    '1': [2],
+    '2': [2],
+    '3': [2],
+    '100': [3]
+  };
+  var REMOVE_ATTRIBUTE_DISABLED = {
+    '1': [2],
+    '2': [1, 2],
+    '3': [0, 1, 2],
+    '100': [3]
+  };
+  var REMOVE_ATTRIBUTE_SELECTED = {
+    '1': [0, 1, 3],
+    '2': [0, 1, 3],
+    '3': [0, 1, 3],
+    '100': [0, 1, 2]
+  };
 
   var map = document.querySelector('.map');
   var mapPinMain = document.querySelector('.map__pin--main');
@@ -145,9 +168,12 @@
   var showMapAndForm = function () {
     map.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
+    addOffers(getOffers(8));
 
     adFormAddress.value = getAddressValue(PIN_WIDTH / 2, PIN_HEIGHT + END_PIN_HEIGHT);
   };
+
+  adFormAddress.value = getAddressValue(PIN_WIDTH / 2, PIN_HEIGHT / 2);
 
   mapPinMain.addEventListener('mousedown', function () {
     showMapAndForm();
@@ -159,24 +185,55 @@
     }
   });
 
+  // Change the minimum price depending on the type of housing
   var changeMinPrice = function (objRooms) {
     var roomTypsList = Object.keys(objRooms);
-    for (var i = 0; i < roomTypsList.length; i++) {
-      if (selectTypeHose.value === roomTypsList[i]) {
-        inputPrice.min = objRooms[roomTypsList[i]];
+
+    roomTypsList.forEach(function (element) {
+      if (selectTypeHose.value === element) {
+        inputPrice.min = objRooms[element];
       }
-    }
+    });
   };
 
+  // synchronizes time between timein and timeout
   var changeTime = function (timeList, checkElement, changeElement) {
-    for (var i = 0; i < timeList.length; i++) {
-      if (checkElement.value === timeList[i]) {
-        changeElement.value = timeList[i];
+    timeList.forEach(function (element) {
+      if (checkElement.value === element) {
+        changeElement.value = element;
       }
-    }
+    });
   };
 
-  adFormAddress.value = getAddressValue(PIN_WIDTH / 2, PIN_HEIGHT / 2);
+  // add atribute for capacity list
+  var addAttributes = function (objAttributes, attribute) {
+    var keysList = Object.keys(objAttributes); // ['1', '2', '3', '100']
+
+    keysList.forEach(function (keysListElement) {
+      if (selectRoomNumber.value === keysListElement) { // '1'
+        var elementIndexList = objAttributes[keysListElement]; // [0, 1, 3]
+
+        elementIndexList.forEach(function (elementIndex) {
+          optionsCapacitys[elementIndex].setAttribute(attribute, attribute);
+        });
+      }
+    });
+  };
+
+  // remove atribute for capacity list
+  var removeAttributes = function (objAttributes, attribute) {
+    var keysList = Object.keys(objAttributes); // ['1', '2', '3', '100']
+
+    keysList.forEach(function (keysListElement) {
+      if (selectRoomNumber.value === keysListElement) { // '1'
+        var elementList = objAttributes[keysListElement]; // [2]
+
+        elementList.forEach(function (elementIndex) {
+          optionsCapacitys[elementIndex].removeAttribute(attribute);
+        });
+      }
+    });
+  };
 
   selectTypeHose.addEventListener('change', function () {
     changeMinPrice(ROOM_PRICES);
@@ -190,68 +247,14 @@
     changeTime(TIME_LIST, selectTimeout, selectTimein);
   });
 
-  optionsCapacitys[0].removeAttribute('selected');
-  optionsCapacitys[2].removeAttribute('selected');
-  optionsCapacitys[3].removeAttribute('selected');
-
-  optionsCapacitys[2].setAttribute('selected', 'selected');
-
-  var setAttributeDisabled = {
-    '1': [0, 1, 3],
-    '2': [0, 3],
-    '3': [3],
-    '100': [0, 1, 2]
-  };
-
-  var setAttributeSelected = {
-    '1': [2],
-    '2': [2],
-    '3': [2],
-    '100': [3]
-  };
-
-  var removeAttributeDisabled = {
-    '1': [2],
-    '2': [1, 2],
-    '3': [0, 1, 2],
-    '100': [3]
-  };
-
-  var removeAttributeSelected = {
-    '1': [0, 1, 3],
-    '2': [0, 1, 3],
-    '3': [0, 1, 3],
-    '100': [0, 1, 2]
-  };
-
-  var addAttribute = function (objAttributes, attribute) {
-    var keysList = Object.keys(objAttributes); // ['1', '2', '3', '100']
-    for (var i = 0; i < keysList.length; i++) {
-      if (selectRoomNumber.value === keysList[i]) { // '1'
-        var elementList = objAttributes[keysList[i]]; // [0, 1, 3]
-        for (var j = 0; j < elementList.length; j++) {
-          optionsCapacitys[elementList[j]].setAttribute(attribute, attribute);
-        }
-      }
-    }
-  };
-
-  var removeAttribute = function (objAttributes, attribute) {
-    var keysList = Object.keys(objAttributes); // ['1', '2', '3', '100']
-    for (var i = 0; i < keysList.length; i++) {
-      if (selectRoomNumber.value === keysList[i]) { // '1'
-        var elementList = objAttributes[keysList[i]]; // [0, 1, 3]
-        for (var j = 0; j < elementList.length; j++) {
-          optionsCapacitys[elementList[j]].removeAttribute(attribute);
-        }
-      }
-    }
-  };
+  addAttributes(SET_ATTRIBUTE_DISABLED, 'disabled');
+  addAttributes(SET_ATTRIBUTE_SELECTED, 'selected');
 
   selectRoomNumber.addEventListener('change', function () {
-    addAttribute(setAttributeDisabled, 'disabled');
-    addAttribute(setAttributeSelected, 'selected');
-    removeAttribute(removeAttributeDisabled, 'disabled');
-    removeAttribute(removeAttributeSelected, 'selected');
+    addAttributes(SET_ATTRIBUTE_DISABLED, 'disabled');
+    addAttributes(SET_ATTRIBUTE_SELECTED, 'selected');
+    removeAttributes(REMOVE_ATTRIBUTE_DISABLED, 'disabled');
+    removeAttributes(REMOVE_ATTRIBUTE_SELECTED, 'selected');
   });
-})();
+}());
+
