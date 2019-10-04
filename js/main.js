@@ -256,4 +256,3 @@
     removeAttributes(REMOVE_ATTRIBUTE_SELECTED, 'selected');
   });
 }());
-
