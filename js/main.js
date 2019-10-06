@@ -91,44 +91,12 @@
     return Math.floor(number);
   };
 
-  // var getOffers = function (count) {
-  //   var offersList = [];
-  //   for (var i = 0; i < count; i++) {
-  //     var locationX = getRandomNumber(MapRect.LEFT, MapRect.RIGHT);
-  //     var locationY = getRandomNumber(MapRect.TOP, MapRect.BOTTOM);
-  //     var offer = {
-  //       'author': {
-  //         'avatar': 'img/avatars/user0' + (i + 1) + '.png'
-  //       },
-  //       'offer': {
-  //         'title': 'заголовок предложения',
-  //         'address': 'x: ' + locationX + '; y: ' + locationY,
-  //         'price': getRandomElement(PRICES),
-  //         'type': getRandomElement(TYPES),
-  //         'rooms': getRandomElement(ROOMS),
-  //         'guests': getRandomElement(GUESTS),
-  //         'checkin': getRandomElement(CHECKINS),
-  //         'checkout': getRandomElement(CHECKOUTS),
-  //         'features': createListRandomLength(FEATURES),
-  //         'description': getRandomElement(DESCRIPTIONS),
-  //         'photos': createListRandomLength(PHOTOS)
-  //       },
-  //       'location': {
-  //         'x': locationX,
-  //         'y': locationY
-  //       }
-  //     };
-  //     offersList.push(offer);
-  //   }
-  //   return offersList;
-  // };
-
   var getOffer = function () {
     var locationX = getRandomNumber(MapRect.LEFT, MapRect.RIGHT);
     var locationY = getRandomNumber(MapRect.TOP, MapRect.BOTTOM);
     var offerTemplate = {
       'author': {
-        'avatar': 'img/avatars/user0' + /* (i + 1)*/ 1 + '.png'
+        'avatar': 'img/avatars/user0' + 1 + '.png'
       },
       'offer': {
         'title': 'заголовок предложения',
@@ -158,8 +126,8 @@
 
     pinImage.alt = offer.offer.title;
     pinImage.src = offer.author.avatar;
-    // pin.style.left = offers.location.x + 'px; ';
-    // pin.style.top = offers.location.y + 'px; ';
+    // pin.style.left = offer.location.x + 'px; ';
+    // pin.style.top = offer.location.y + 'px; ';
     pin.style = 'left: ' + offer.location.x + 'px; ' +
                 'top: ' + offer.location.y + 'px;';
     return fragmentPin.appendChild(pin);
@@ -167,7 +135,7 @@
 
   var addOffers = function (count, offer) {
     for (var i = 0; i < count; i++) {
-      createPin(offer);
+      createPin(offer());
     }
     return mapPinsBlock.appendChild(fragmentPin);
   };
@@ -200,12 +168,6 @@
     }
   };
 
-  toglelDisabled(formFieldsetList);
-
-  // formFieldsetList.forEach(function (fieldset) {
-  //   fieldset.setAttribute('disabled', 'disabled');
-  // });
-
   var isEnterKey = function (evt) {
     return evt.key === keyboardKey.ENTER;
   };
@@ -226,15 +188,13 @@
     map.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
 
-    addOffers(8, getOffer());
+    addOffers(8, getOffer);
     renderAddress(getMainPinCoords(MainPinSize.HEIGHT));
 
     mapPinMain.removeEventListener('mousedown', onShowMap);
     mapPinMain.removeEventListener('keydown', onShowMap);
     toglelDisabled(formFieldsetList, true);
   };
-
-  renderAddress(getMainPinCoords(MainPinSize.RADIUS));
 
   var onShowMap = function (evt) {
     if (isEnterKey(evt)) {
@@ -243,9 +203,6 @@
       showMapAndForm();
     }
   };
-
-  mapPinMain.addEventListener('mousedown', onShowMap);
-  mapPinMain.addEventListener('keydown', onShowMap);
 
   // Change the minimum price depending on the type of housing
   var changeMinPrice = function (objRooms) {
@@ -276,7 +233,7 @@
         var elementIndexList = objAttributes[keysListElement]; // [0, 1, 3]
 
         elementIndexList.forEach(function (elementIndex) {
-          optionsCapacitys[elementIndex].setAttribute(attribute, attribute);
+          optionsCapacitys[elementIndex].setAttribute(attribute, true);
         });
       }
     });
@@ -297,6 +254,15 @@
     });
   };
 
+  formFieldsetList.forEach(function (fieldset) {
+    fieldset.setAttribute('disabled', 'disabled');
+  });
+
+  mapPinMain.addEventListener('mousedown', onShowMap);
+  mapPinMain.addEventListener('keydown', onShowMap);
+
+  toglelDisabled(formFieldsetList);
+
   selectTypeHose.addEventListener('change', function () {
     changeMinPrice(ROOM_PRICES);
   });
@@ -308,6 +274,8 @@
   selectTimeout.addEventListener('change', function () {
     changeTime(TIME_LIST, selectTimeout, selectTimein);
   });
+
+  renderAddress(getMainPinCoords(MainPinSize.RADIUS));
 
   addAttributes(SET_ATTRIBUTE_DISABLED, 'disabled');
   addAttributes(SET_ATTRIBUTE_SELECTED, 'selected');
