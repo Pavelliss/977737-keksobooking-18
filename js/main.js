@@ -1,10 +1,8 @@
 'use strict';
-// Test date
 (function () {
   var mapPinsBlock = document.querySelector('.map__pins');
-  var pinTemplateCont = document.querySelector('#pin').content;
+  var pinTemplateCont = document.querySelector('#pin').content.querySelector('.map__pin');
 
-  var MAP_WIDTH = mapPinsBlock.offsetWidth;
   var PRICES = [100, 150, 200, 250, 300, 350, 400, 450];
   var TYPES = ['palace', 'flat', 'house', 'bungalo'];
   var ROOMS = [2, 3, 1];
@@ -18,91 +16,24 @@
     'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
     'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
   ];
-
-  // Creating random array element
-  var getRandomElement = function (array) {
-    var indexElement = Math.floor(Math.random() * array.length);
-    return array[indexElement];
+  var MapRect = {
+    LEFT: 0,
+    TOP: 130,
+    RIGHT: 1200,
+    BOTTOM: 630
   };
 
-  // Creating random array langth
-  var getRandomLength = function (array) {
-    return Math.round(0.5 + Math.random() * array.length);
+  var keyboardKey = {
+    ENTER: 'Enter',
+    ESCAPE: 'Escape',
+    ESCAPE_IE: 'Esc'
   };
 
-  // create a new list of random length from the old list
-  var createListRandomLength = function (oldList) {
-    var newList = [];
-    for (var i = 0; i < getRandomLength(oldList); i++) {
-      newList.push(oldList[i]);
-    }
-    return newList;
+  var MainPinSize = {
+    RADIUS: 32,
+    HEIGHT: 80
   };
 
-  // random number
-  var getRandomNumber = function (min, max) {
-    var number = min + Math.random() * (max + 1 - min);
-    return Math.floor(number);
-  };
-
-  var getOffers = function (count) {
-    var offersList = [];
-    for (var i = 0; i < count; i++) {
-      var locationX = getRandomNumber(0, MAP_WIDTH);
-      var locationY = getRandomNumber(130, 630);
-      var offer = {
-        'author': {
-          'avatar': 'img/avatars/user0' + (i + 1) + '.png'
-        },
-        'offer': {
-          'title': 'заголовок предложения',
-          'address': 'x: ' + locationX + '; y: ' + locationY,
-          'price': getRandomElement(PRICES),
-          'type': getRandomElement(TYPES),
-          'rooms': getRandomElement(ROOMS),
-          'guests': getRandomElement(GUESTS),
-          'checkin': getRandomElement(CHECKINS),
-          'checkout': getRandomElement(CHECKOUTS),
-          'features': createListRandomLength(FEATURES),
-          'description': getRandomElement(DESCRIPTIONS),
-          'photos': createListRandomLength(PHOTOS)
-        },
-        'location': {
-          'x': locationX,
-          'y': locationY
-        }
-      };
-      offersList.push(offer);
-    }
-    return offersList;
-  };
-  // Pin creating
-  var fragmentPin = document.createDocumentFragment();
-  var createPin = function (array, index) {
-    var pinElement = pinTemplateCont.cloneNode(true);
-
-    pinElement.querySelector('img').src = array[index].author.avatar;
-    pinElement.querySelector('img').alt = array[index].offer.title;
-    pinElement.querySelector('.map__pin').style =
-     'left: ' + array[index].location.x + 'px; ' + 'top: ' + array[index].location.y + 'px;';
-
-    return pinElement;
-  };
-
-  // adding content to the markup
-  var addOffers = function (array) {
-    for (var i = 0; i < array.length; i++) {
-      fragmentPin.appendChild(createPin(array, i));
-    }
-    return mapPinsBlock.appendChild(fragmentPin);
-  };
-
-  // MODULE 4
-
-  var KEYCODE_ENTER = 13;
-  var PIN_WIDTH = 65;
-  var PIN_HEIGHT = 65;
-  var END_PIN_HEIGHT = 22;
   var ROOM_PRICES = {
     'bungalo': '0',
     'flat': '1000',
@@ -135,6 +66,114 @@
     '100': [0, 1, 2]
   };
 
+  // Creating random array element
+  var getRandomElement = function (array) {
+    return array[Math.floor(Math.random() * array.length)];
+  };
+
+  // Creating random array langth
+  var getRandomLength = function (array) {
+    return Math.round(0.5 + Math.random() * array.length);
+  };
+
+  // create a new list of random length from the old list
+  var createListRandomLength = function (oldList) {
+    var newList = [];
+    for (var i = 0; i < getRandomLength(oldList); i++) {
+      newList.push(oldList[i]);
+    }
+    return newList;
+  };
+
+  // random number
+  var getRandomNumber = function (min, max) {
+    var number = min + Math.random() * (max + 1 - min);
+    return Math.floor(number);
+  };
+
+  // var getOffers = function (count) {
+  //   var offersList = [];
+  //   for (var i = 0; i < count; i++) {
+  //     var locationX = getRandomNumber(MapRect.LEFT, MapRect.RIGHT);
+  //     var locationY = getRandomNumber(MapRect.TOP, MapRect.BOTTOM);
+  //     var offer = {
+  //       'author': {
+  //         'avatar': 'img/avatars/user0' + (i + 1) + '.png'
+  //       },
+  //       'offer': {
+  //         'title': 'заголовок предложения',
+  //         'address': 'x: ' + locationX + '; y: ' + locationY,
+  //         'price': getRandomElement(PRICES),
+  //         'type': getRandomElement(TYPES),
+  //         'rooms': getRandomElement(ROOMS),
+  //         'guests': getRandomElement(GUESTS),
+  //         'checkin': getRandomElement(CHECKINS),
+  //         'checkout': getRandomElement(CHECKOUTS),
+  //         'features': createListRandomLength(FEATURES),
+  //         'description': getRandomElement(DESCRIPTIONS),
+  //         'photos': createListRandomLength(PHOTOS)
+  //       },
+  //       'location': {
+  //         'x': locationX,
+  //         'y': locationY
+  //       }
+  //     };
+  //     offersList.push(offer);
+  //   }
+  //   return offersList;
+  // };
+
+  var getOffer = function () {
+    var locationX = getRandomNumber(MapRect.LEFT, MapRect.RIGHT);
+    var locationY = getRandomNumber(MapRect.TOP, MapRect.BOTTOM);
+    var offerTemplate = {
+      'author': {
+        'avatar': 'img/avatars/user0' + /* (i + 1)*/ 1 + '.png'
+      },
+      'offer': {
+        'title': 'заголовок предложения',
+        'address': 'x: ' + locationX + '; y: ' + locationY,
+        'price': getRandomElement(PRICES),
+        'type': getRandomElement(TYPES),
+        'rooms': getRandomElement(ROOMS),
+        'guests': getRandomElement(GUESTS),
+        'checkin': getRandomElement(CHECKINS),
+        'checkout': getRandomElement(CHECKOUTS),
+        'features': createListRandomLength(FEATURES),
+        'description': getRandomElement(DESCRIPTIONS),
+        'photos': createListRandomLength(PHOTOS)
+      },
+      'location': {
+        'x': locationX,
+        'y': locationY
+      }
+    };
+    return offerTemplate;
+  };
+  // Pin creating
+  var fragmentPin = document.createDocumentFragment();
+  var createPin = function (offer) {
+    var pin = pinTemplateCont.cloneNode(true);
+    var pinImage = pin.querySelector('img');
+
+    pinImage.alt = offer.offer.title;
+    pinImage.src = offer.author.avatar;
+    // pin.style.left = offers.location.x + 'px; ';
+    // pin.style.top = offers.location.y + 'px; ';
+    pin.style = 'left: ' + offer.location.x + 'px; ' +
+                'top: ' + offer.location.y + 'px;';
+    return fragmentPin.appendChild(pin);
+  };
+
+  var addOffers = function (count, offer) {
+    for (var i = 0; i < count; i++) {
+      createPin(offer);
+    }
+    return mapPinsBlock.appendChild(fragmentPin);
+  };
+
+  // MODULE 4
+
   var map = document.querySelector('.map');
   var mapPinMain = document.querySelector('.map__pin--main');
   var adForm = document.querySelector('.ad-form');
@@ -146,43 +185,67 @@
   var selectRoomNumber = adForm.querySelector('#room_number');
   var selectCapacity = adForm.querySelector('#capacity');
   var optionsCapacitys = selectCapacity.querySelectorAll('option');
+  var formFieldsetList = adForm.querySelectorAll('fieldset');
 
-  // convert value from: 'left: 550px' to: '550'
-  var convertAddressData = function (adress) {
-    return Number(adress.substr(0, adress.length - 2));
+  // add attributes disabled for form elements
+  var toglelDisabled = function (listElements, flag) {
+    if (flag) {
+      listElements.forEach(function (element) {
+        element.removeAttribute('disabled');
+      });
+    } else {
+      listElements.forEach(function (element) {
+        element.setAttribute('disabled', 'disabled');
+      });
+    }
   };
 
-  // Get string address. Parameters 'amendmentX, amendmentY' increase or decrease values X and Y
-  var getAddressValue = function (amendmentX, amendmentY) {
-    var newAddress;
-    if (!amendmentX || !amendmentY) {
-      newAddress = 'x: ' + Math.round(convertAddressData(mapPinMain.style.left)) + ', y: ' + Math.round(convertAddressData(mapPinMain.style.top));
-    } else {
-      newAddress = 'x: ' + Math.round((convertAddressData(mapPinMain.style.left) + amendmentX)) + ', y: ' + Math.round((convertAddressData(mapPinMain.style.top) + amendmentY));
-    }
-    return newAddress;
+  toglelDisabled(formFieldsetList);
+
+  // formFieldsetList.forEach(function (fieldset) {
+  //   fieldset.setAttribute('disabled', 'disabled');
+  // });
+
+  var isEnterKey = function (evt) {
+    return evt.key === keyboardKey.ENTER;
+  };
+
+  var getMainPinCoords = function (height) {
+    return {
+      x: mapPinMain.offsetLeft + MainPinSize.RADIUS,
+      y: mapPinMain.offsetTop + height
+    };
+  };
+
+  var renderAddress = function (coords) {
+    adFormAddress.value = coords.x + ', ' + coords.y;
   };
 
   // Show map. filter and forms
   var showMapAndForm = function () {
     map.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
-    addOffers(getOffers(8));
 
-    adFormAddress.value = getAddressValue(PIN_WIDTH / 2, PIN_HEIGHT + END_PIN_HEIGHT);
+    addOffers(8, getOffer());
+    renderAddress(getMainPinCoords(MainPinSize.HEIGHT));
+
+    mapPinMain.removeEventListener('mousedown', onShowMap);
+    mapPinMain.removeEventListener('keydown', onShowMap);
+    toglelDisabled(formFieldsetList, true);
   };
 
-  adFormAddress.value = getAddressValue(PIN_WIDTH / 2, PIN_HEIGHT / 2);
+  renderAddress(getMainPinCoords(MainPinSize.RADIUS));
 
-  mapPinMain.addEventListener('mousedown', function () {
-    showMapAndForm();
-  });
-
-  mapPinMain.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === KEYCODE_ENTER) {
+  var onShowMap = function (evt) {
+    if (isEnterKey(evt)) {
+      showMapAndForm();
+    } else {
       showMapAndForm();
     }
-  });
+  };
+
+  mapPinMain.addEventListener('mousedown', onShowMap);
+  mapPinMain.addEventListener('keydown', onShowMap);
 
   // Change the minimum price depending on the type of housing
   var changeMinPrice = function (objRooms) {
