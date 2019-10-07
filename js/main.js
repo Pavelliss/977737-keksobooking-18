@@ -1,7 +1,7 @@
 'use strict';
 (function () {
   var mapPinsBlock = document.querySelector('.map__pins');
-  var pinTemplateCont = document.querySelector('#pin').content.querySelector('.map__pin');
+  var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 
   var PRICES = [100, 150, 200, 250, 300, 350, 400, 450];
   var TYPES = ['palace', 'flat', 'house', 'bungalo'];
@@ -23,7 +23,7 @@
     BOTTOM: 630
   };
 
-  var keyboardKey = {
+  var KeyboardKey = {
     ENTER: 'Enter',
     ESCAPE: 'Escape',
     ESCAPE_IE: 'Esc'
@@ -96,12 +96,12 @@
     return Math.floor(number);
   };
 
-  var getOffer = function (numberPhoto) {
+  var getAdvert = function (photoId) {
     var locationX = getRandomNumber(MapRect.LEFT, MapRect.RIGHT);
     var locationY = getRandomNumber(MapRect.TOP, MapRect.BOTTOM);
-    var offerTemplate = {
+    return {
       'author': {
-        'avatar': 'img/avatars/user0' + (numberPhoto + 1) + '.png'
+        'avatar': 'img/avatars/user0' + (photoId + 1) + '.png'
       },
       'offer': {
         'title': 'заголовок предложения',
@@ -121,12 +121,11 @@
         'y': locationY
       }
     };
-    return offerTemplate;
   };
+
   // Pin creating
-  var fragmentPin = document.createDocumentFragment();
-  var createPin = function (offer) {
-    var pin = pinTemplateCont.cloneNode(true);
+  var renderPin = function (offer) {
+    var pin = pinTemplate.cloneNode(true);
     var pinImage = pin.querySelector('img');
 
     pinImage.alt = offer.offer.title;
@@ -134,15 +133,25 @@
     pin.style.left = (offer.location.x + PinSize.RADIUS) + 'px';
     pin.style.top = (offer.location.y + PinSize.HEIGHT) + 'px';
 
-    return fragmentPin.appendChild(pin);
+    return pin;
   };
 
-  var addOffers = function (count, offer) {
-    for (var i = 0; i < count; i++) {
-      createPin(offer(i));
-    }
-    return mapPinsBlock.appendChild(fragmentPin);
+  var getOffers = function (num) {
+    return new Array(num).fill(null).map(function (_, idx) {
+      return getAdvert(idx);
+    });
   };
+
+  var renderPins = function (offers) {
+    var fragment = document.createDocumentFragment();
+    offers.forEach(function (offer) {
+      fragment.appendChild(renderPin(offer));
+    });
+
+    mapPinsBlock.appendChild(fragment);
+  };
+
+  var offers = getOffers(8);
 
   // MODULE 4
 
@@ -160,20 +169,26 @@
   var formFieldsetList = adForm.querySelectorAll('fieldset');
 
   // add attributes disabled for form elements
-  var toglelDisabled = function (listElements, flag) {
-    if (flag) {
-      listElements.forEach(function (element) {
-        element.removeAttribute('disabled');
-      });
-    } else {
-      listElements.forEach(function (element) {
-        element['disabled'] = true;
-      });
-    }
+  // var toglelDisabled = function (listElements, flag) {
+  //   if (flag) {
+  //     listElements.forEach(function (element) {
+  //       element.removeAttribute('disabled');
+  //     });
+  //   } else {
+  //     listElements.forEach(function (element) {
+  //       element['disabled'] = true;
+  //     });
+  //   }
+  // };
+
+  var addDisabledFildset = function (listElements, flag) {
+    listElements.forEach(function (element) {
+      element['disabled'] = flag;
+    });
   };
 
   var isEnterKey = function (evt) {
-    return evt.key === keyboardKey.ENTER;
+    return evt.key === KeyboardKey.ENTER;
   };
 
   var getMainPinCoords = function (height) {
@@ -192,18 +207,20 @@
     map.classList.remove('map--faded');
     adForm.classList.remove('ad-form--disabled');
 
-    addOffers(8, getOffer);
+    renderPins(offers);
     renderAddress(getMainPinCoords(MainPinSize.HEIGHT));
 
-    mapPinMain.removeEventListener('mousedown', onShowMap);
-    mapPinMain.removeEventListener('keydown', onShowMap);
-    toglelDisabled(formFieldsetList, true);
+    mapPinMain.removeEventListener('mousedown', onMainPinMouseDown);
+    mapPinMain.removeEventListener('keydown', onMainPinEnterPress);
+    addDisabledFildset(formFieldsetList, false);
   };
 
-  var onShowMap = function (evt) {
+  var onMainPinMouseDown = function () {
+    showMapAndForm();
+  };
+
+  var onMainPinEnterPress = function (evt) {
     if (isEnterKey(evt)) {
-      showMapAndForm();
-    } else {
       showMapAndForm();
     }
   };
@@ -262,10 +279,10 @@
     fieldset.setAttribute('disabled', 'true');
   });
 
-  mapPinMain.addEventListener('mousedown', onShowMap);
-  mapPinMain.addEventListener('keydown', onShowMap);
+  mapPinMain.addEventListener('mousedown', onMainPinMouseDown);
+  mapPinMain.addEventListener('keydown', onMainPinEnterPress);
 
-  toglelDisabled(formFieldsetList);
+  addDisabledFildset(formFieldsetList, true);
 
   selectTypeHose.addEventListener('change', function () {
     changeMinPrice(ROOM_PRICES);
