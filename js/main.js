@@ -34,6 +34,11 @@
     HEIGHT: 80
   };
 
+  var PinSize = {
+    RADIUS: 25,
+    HEIGHT: 70
+  };
+
   var ROOM_PRICES = {
     'bungalo': '0',
     'flat': '1000',
@@ -126,8 +131,8 @@
 
     pinImage.alt = offer.offer.title;
     pinImage.src = offer.author.avatar;
-    pin.style.left = offer.location.x + 'px';
-    pin.style.top = offer.location.y + 'px';
+    pin.style.left = (offer.location.x + PinSize.RADIUS) + 'px';
+    pin.style.top = (offer.location.y + PinSize.HEIGHT) + 'px';
 
     return fragmentPin.appendChild(pin);
   };
@@ -162,7 +167,7 @@
       });
     } else {
       listElements.forEach(function (element) {
-        element.setAttribute('disabled', 'true');
+        element['disabled'] = true;
       });
     }
   };
@@ -232,7 +237,7 @@
         var elementIndexList = objAttributes[keysListElement]; // [0, 1, 3]
 
         elementIndexList.forEach(function (elementIndex) {
-          optionsCapacitys[elementIndex].setAttribute(attribute, true);
+          optionsCapacitys[elementIndex][attribute] = true;
         });
       }
     });
@@ -247,7 +252,7 @@
         var elementList = objAttributes[keysListElement]; // [2]
 
         elementList.forEach(function (elementIndex) {
-          optionsCapacitys[elementIndex].removeAttribute(attribute);
+          optionsCapacitys[elementIndex][attribute] = false;
         });
       }
     });
