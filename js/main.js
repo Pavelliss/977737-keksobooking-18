@@ -168,22 +168,9 @@
   var optionsCapacitys = selectCapacity.querySelectorAll('option');
   var formFieldsetList = adForm.querySelectorAll('fieldset');
 
-  // add attributes disabled for form elements
-  // var toglelDisabled = function (listElements, flag) {
-  //   if (flag) {
-  //     listElements.forEach(function (element) {
-  //       element.removeAttribute('disabled');
-  //     });
-  //   } else {
-  //     listElements.forEach(function (element) {
-  //       element['disabled'] = true;
-  //     });
-  //   }
-  // };
-
   var addDisabledFildset = function (listElements, flag) {
-    listElements.forEach(function (element) {
-      element['disabled'] = flag;
+    listElements.forEach(function (fildset) {
+      fildset['disabled'] = flag;
     });
   };
 
