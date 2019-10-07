@@ -91,12 +91,12 @@
     return Math.floor(number);
   };
 
-  var getOffer = function () {
+  var getOffer = function (numberPhoto) {
     var locationX = getRandomNumber(MapRect.LEFT, MapRect.RIGHT);
     var locationY = getRandomNumber(MapRect.TOP, MapRect.BOTTOM);
     var offerTemplate = {
       'author': {
-        'avatar': 'img/avatars/user0' + 1 + '.png'
+        'avatar': 'img/avatars/user0' + (numberPhoto + 1) + '.png'
       },
       'offer': {
         'title': 'заголовок предложения',
@@ -126,16 +126,15 @@
 
     pinImage.alt = offer.offer.title;
     pinImage.src = offer.author.avatar;
-    // pin.style.left = offer.location.x + 'px; ';
-    // pin.style.top = offer.location.y + 'px; ';
-    pin.style = 'left: ' + offer.location.x + 'px; ' +
-                'top: ' + offer.location.y + 'px;';
+    pin.style.left = offer.location.x + 'px';
+    pin.style.top = offer.location.y + 'px';
+
     return fragmentPin.appendChild(pin);
   };
 
   var addOffers = function (count, offer) {
     for (var i = 0; i < count; i++) {
-      createPin(offer());
+      createPin(offer(i));
     }
     return mapPinsBlock.appendChild(fragmentPin);
   };
@@ -163,7 +162,7 @@
       });
     } else {
       listElements.forEach(function (element) {
-        element.setAttribute('disabled', 'disabled');
+        element.setAttribute('disabled', 'true');
       });
     }
   };
@@ -255,7 +254,7 @@
   };
 
   formFieldsetList.forEach(function (fieldset) {
-    fieldset.setAttribute('disabled', 'disabled');
+    fieldset.setAttribute('disabled', 'true');
   });
 
   mapPinMain.addEventListener('mousedown', onShowMap);
@@ -286,4 +285,5 @@
     removeAttributes(REMOVE_ATTRIBUTE_DISABLED, 'disabled');
     removeAttributes(REMOVE_ATTRIBUTE_SELECTED, 'selected');
   });
+
 }());
