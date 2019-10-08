@@ -1,8 +1,5 @@
 'use strict';
 (function () {
-  var mapPinsBlock = document.querySelector('.map__pins');
-  var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
-
   var PRICES = [100, 150, 200, 250, 300, 350, 400, 450];
   var TYPES = ['palace', 'flat', 'house', 'bungalo'];
   var ROOMS = [2, 3, 1];
@@ -16,6 +13,8 @@
     'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
     'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
   ];
+  var LIST_TIMES = ['12:00', '13:00', '14:00'];
+
   var MapRect = {
     LEFT: 0,
     TOP: 130,
@@ -39,37 +38,40 @@
     HEIGHT: 70
   };
 
-  var ROOM_PRICES = {
-    'bungalo': '0',
-    'flat': '1000',
-    'house': '5000',
-    'palace': '10000'
-  };
-  var TIME_LIST = ['12:00', '13:00', '14:00'];
-  var SET_ATTRIBUTE_DISABLED = {
+  var roomCountToAddDisabled = {
     '1': [0, 1, 3],
     '2': [0, 3],
     '3': [3],
     '100': [0, 1, 2]
   };
-  var SET_ATTRIBUTE_SELECTED = {
+  var roomCountToAddSelected = {
     '1': [2],
     '2': [2],
     '3': [2],
     '100': [3]
   };
-  var REMOVE_ATTRIBUTE_DISABLED = {
+  var roomCountToRemoveDisabled = {
     '1': [2],
     '2': [1, 2],
     '3': [0, 1, 2],
     '100': [3]
   };
-  var REMOVE_ATTRIBUTE_SELECTED = {
+  var roomCountToRemoveSelected = {
     '1': [0, 1, 3],
     '2': [0, 1, 3],
     '3': [0, 1, 3],
     '100': [0, 1, 2]
   };
+
+  var offerTypeToMinPrice = {
+    'bungalo': '0',
+    'flat': '1000',
+    'house': '5000',
+    'palace': '10000'
+  };
+
+  var mapPinsBlock = document.querySelector('.map__pins');
+  var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 
   // Creating random array element
   var getRandomElement = function (array) {
@@ -130,8 +132,8 @@
 
     pinImage.alt = offer.offer.title;
     pinImage.src = offer.author.avatar;
-    pin.style.left = (offer.location.x + PinSize.RADIUS) + 'px';
-    pin.style.top = (offer.location.y + PinSize.HEIGHT) + 'px';
+    pin.style.left = (offer.location.x - PinSize.RADIUS) + 'px';
+    pin.style.top = (offer.location.y - PinSize.HEIGHT) + 'px';
 
     return pin;
   };
@@ -158,6 +160,7 @@
   var map = document.querySelector('.map');
   var mapPinMain = document.querySelector('.map__pin--main');
   var adForm = document.querySelector('.ad-form');
+  var filterForm = document.querySelector('.map__filters');
   var adFormAddress = adForm.querySelector('#address');
   var inputPrice = adForm.querySelector('#price');
   var selectTypeHose = adForm.querySelector('#type');
@@ -166,11 +169,12 @@
   var selectRoomNumber = adForm.querySelector('#room_number');
   var selectCapacity = adForm.querySelector('#capacity');
   var optionsCapacitys = selectCapacity.querySelectorAll('option');
-  var formFieldsetList = adForm.querySelectorAll('fieldset');
+  var adFormFieldsetList = adForm.querySelectorAll('fieldset');
+  var filterFormFieldsetList = filterForm.querySelectorAll('select');
 
   var addDisabledFildset = function (listElements, flag) {
     listElements.forEach(function (fildset) {
-      fildset['disabled'] = flag;
+      fildset.disabled = flag;
     });
   };
 
@@ -199,7 +203,8 @@
 
     mapPinMain.removeEventListener('mousedown', onMainPinMouseDown);
     mapPinMain.removeEventListener('keydown', onMainPinEnterPress);
-    addDisabledFildset(formFieldsetList, false);
+    addDisabledFildset(adFormFieldsetList, false);
+    addDisabledFildset(filterFormFieldsetList, false);
   };
 
   var onMainPinMouseDown = function () {
@@ -212,19 +217,13 @@
     }
   };
 
-  // Change the minimum price depending on the type of housing
-  var changeMinPrice = function (objRooms) {
-    var roomTypsList = Object.keys(objRooms);
-
-    roomTypsList.forEach(function (element) {
-      if (selectTypeHose.value === element) {
-        inputPrice.min = objRooms[element];
-      }
-    });
+  var setOffersPrice = function (price) {
+    inputPrice.min = price;
+    inputPrice.placeholder = price;
   };
 
   // synchronizes time between timein and timeout
-  var changeTime = function (timeList, checkElement, changeElement) {
+  var synchronizeArrivalTime = function (timeList, checkElement, changeElement) {
     timeList.forEach(function (element) {
       if (checkElement.value === element) {
         changeElement.value = element;
@@ -233,7 +232,7 @@
   };
 
   // add atribute for capacity list
-  var addAttributes = function (objAttributes, attribute) {
+  var addAttributesCapacity = function (objAttributes, attribute) {
     var keysList = Object.keys(objAttributes); // ['1', '2', '3', '100']
 
     keysList.forEach(function (keysListElement) {
@@ -248,7 +247,7 @@
   };
 
   // remove atribute for capacity list
-  var removeAttributes = function (objAttributes, attribute) {
+  var removeAttributesCapacity = function (objAttributes, attribute) {
     var keysList = Object.keys(objAttributes); // ['1', '2', '3', '100']
 
     keysList.forEach(function (keysListElement) {
@@ -262,37 +261,34 @@
     });
   };
 
-  formFieldsetList.forEach(function (fieldset) {
-    fieldset.setAttribute('disabled', 'true');
-  });
-
   mapPinMain.addEventListener('mousedown', onMainPinMouseDown);
   mapPinMain.addEventListener('keydown', onMainPinEnterPress);
 
-  addDisabledFildset(formFieldsetList, true);
+  addDisabledFildset(adFormFieldsetList, true);
+  addDisabledFildset(filterFormFieldsetList, true);
 
-  selectTypeHose.addEventListener('change', function () {
-    changeMinPrice(ROOM_PRICES);
+  selectTypeHose.addEventListener('change', function (evt) {
+    var minPrice = offerTypeToMinPrice[evt.target.value];
+    setOffersPrice(minPrice);
   });
 
   selectTimein.addEventListener('change', function () {
-    changeTime(TIME_LIST, selectTimein, selectTimeout);
+    synchronizeArrivalTime(LIST_TIMES, selectTimein, selectTimeout);
   });
 
   selectTimeout.addEventListener('change', function () {
-    changeTime(TIME_LIST, selectTimeout, selectTimein);
+    synchronizeArrivalTime(LIST_TIMES, selectTimeout, selectTimein);
   });
 
   renderAddress(getMainPinCoords(MainPinSize.RADIUS));
 
-  addAttributes(SET_ATTRIBUTE_DISABLED, 'disabled');
-  addAttributes(SET_ATTRIBUTE_SELECTED, 'selected');
+  addAttributesCapacity(roomCountToAddDisabled, 'disabled');
+  addAttributesCapacity(roomCountToAddSelected, 'selected');
 
   selectRoomNumber.addEventListener('change', function () {
-    addAttributes(SET_ATTRIBUTE_DISABLED, 'disabled');
-    addAttributes(SET_ATTRIBUTE_SELECTED, 'selected');
-    removeAttributes(REMOVE_ATTRIBUTE_DISABLED, 'disabled');
-    removeAttributes(REMOVE_ATTRIBUTE_SELECTED, 'selected');
+    addAttributesCapacity(roomCountToAddDisabled, 'disabled');
+    addAttributesCapacity(roomCountToAddSelected, 'selected');
+    removeAttributesCapacity(roomCountToRemoveDisabled, 'disabled');
+    removeAttributesCapacity(roomCountToRemoveSelected, 'selected');
   });
-
 }());
