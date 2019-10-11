@@ -1,5 +1,19 @@
 'use strict';
 (function () {
+  window.pin = {
+    MainPinSize: {
+      RADIUS: 32,
+      HEIGHT: 80
+    },
+
+    getMainPinCoords: function (height) {
+      return {
+        x: window.mapPinMain.offsetLeft + window.pin.MainPinSize.RADIUS,
+        y: window.mapPinMain.offsetTop + height
+      };
+    }
+  };
+
   window.mapPinMain.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
 
@@ -11,7 +25,7 @@
     var onMouseMove = function (moveEvt) {
       moveEvt.preventDefault();
 
-      window.util.renderAddress(window.util.getMainPinCoords(window.UtilMainPinSize.HEIGHT));
+      window.form.renderAddress(window.pin.getMainPinCoords(window.pin.MainPinSize.HEIGHT));
 
       // calculate the difference
       var shift = {
@@ -25,8 +39,15 @@
         y: moveEvt.clientY
       };
 
-      window.mapPinMain.style.top = (window.mapPinMain.offsetTop - shift.y) + 'px';
-      window.mapPinMain.style.left = (window.mapPinMain.offsetLeft - shift.x) + 'px';
+      if (startCords.x < window.data.MapRect.RIGHT + window.pin.MainPinSize.RADIUS
+        && startCords.x > window.data.MapRect.LEFT + window.pin.MainPinSize.RADIUS) {
+        window.mapPinMain.style.left = (window.mapPinMain.offsetLeft - shift.x) + 'px';
+      }
+
+      if (startCords.y < window.data.MapRect.BOTTOM
+        && startCords.y > window.data.MapRect.TOP) {
+        window.mapPinMain.style.top = (window.mapPinMain.offsetTop - shift.y) + 'px';
+      }
     };
 
     var onMouseUp = function (upEvt) {
