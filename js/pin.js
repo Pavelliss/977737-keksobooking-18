@@ -39,15 +39,31 @@
         y: moveEvt.clientY
       };
 
-      if (startCords.x < window.data.MapRect.RIGHT + window.pin.MainPinSize.RADIUS
-        && startCords.x > window.data.MapRect.LEFT + window.pin.MainPinSize.RADIUS) {
-        window.mapPinMain.style.left = (window.mapPinMain.offsetLeft - shift.x) + 'px';
-      }
+      var pinToLimitX = {
+        cords: startCords.x,
+        pinMax: window.data.MapRect.RIGHT + window.pin.MainPinSize.RADIUS,
+        pinMin: window.data.MapRect.LEFT + window.pin.MainPinSize.RADIUS,
+        offsetValue: window.mapPinMain.offsetLeft,
+        shift: shift.x
+      };
 
-      if (startCords.y < window.data.MapRect.BOTTOM
-        && startCords.y > window.data.MapRect.TOP) {
-        window.mapPinMain.style.top = (window.mapPinMain.offsetTop - shift.y) + 'px';
-      }
+      var pinToLimitY = {
+        cords: startCords.y,
+        pinMax: window.data.MapRect.BOTTOM,
+        pinMin: window.data.MapRect.TOP,
+        offsetValue: window.mapPinMain.offsetTop,
+        shift: shift.y
+      };
+
+      var addLimitMove = function (pinObj) {
+        if (pinObj.cords < pinObj.pinMax && pinObj.cords > pinObj.pinMin) {
+          var newCordPin = (pinObj.offsetValue - pinObj.shift) + 'px';
+        }
+        return newCordPin;
+      };
+
+      window.mapPinMain.style.left = addLimitMove(pinToLimitX);
+      window.mapPinMain.style.top = addLimitMove(pinToLimitY);
     };
 
     var onMouseUp = function (upEvt) {
