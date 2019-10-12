@@ -28,13 +28,13 @@
   };
 
   // Creating random array element
-  var getRandomElement = function (array) {
-    return array[Math.floor(Math.random() * array.length)];
+  var getRandomElement = function (list) {
+    return list[Math.floor(Math.random() * list.length)];
   };
 
-  // Creating random array langth
-  var getRandomLength = function (array) {
-    return Math.round(0.5 + Math.random() * array.length);
+  // Creating random list langth
+  var getRandomLength = function (list) {
+    return Math.round(0.5 + Math.random() * list.length);
   };
 
   // create a new list of random length from the old list

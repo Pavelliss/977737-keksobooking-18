@@ -40,13 +40,4 @@
 
   addDisabledFildset(adFormFieldsetList, true);
   addDisabledFildset(filterFormFieldsetList, true);
-
-  window.map = {
-    MapRect: {
-      LEFT: 0,
-      TOP: 130,
-      RIGHT: 1200,
-      BOTTOM: 630
-    }
-  };
 }());
