@@ -36,19 +36,17 @@
     '100': [0, 1, 2]
   };
 
-  var inputPrice = window.adForm.querySelector('#price');
-  var adFormAddress = window.adForm.querySelector('#address');
-  var selectTypeHose = window.adForm.querySelector('#type');
-  var selectTimein = window.adForm.querySelector('#timein');
-  var selectTimeout = window.adForm.querySelector('#timeout');
-  var selectRoomNumber = window.adForm.querySelector('#room_number');
-  var selectCapacity = window.adForm.querySelector('#capacity');
+  var inputPrice = window.domRef.adForm.querySelector('#price');
+  var adFormAddress = window.domRef.adForm.querySelector('#address');
+  var selectTypeHose = window.domRef.adForm.querySelector('#type');
+  var selectTimein = window.domRef.adForm.querySelector('#timein');
+  var selectTimeout = window.domRef.adForm.querySelector('#timeout');
+  var selectRoomNumber = window.domRef.adForm.querySelector('#room_number');
+  var selectCapacity = window.domRef.adForm.querySelector('#capacity');
   var optionsCapacitys = selectCapacity.querySelectorAll('option');
 
-  window.form = {
-    renderAddress: function (coords) {
-      adFormAddress.value = coords.x + ', ' + coords.y;
-    },
+  var renderAddress = function (coords) {
+    adFormAddress.value = coords.x + ', ' + coords.y;
   };
 
   // Show map. filter and forms
@@ -109,7 +107,7 @@
     synchronizeArrivalTime(LIST_TIMES, selectTimeout, selectTimein);
   });
 
-  window.form.renderAddress(window.pin.getMainPinCoords(window.pin.MainPinSize.RADIUS));
+  renderAddress(window.pin.getMainPinCoords(window.pin.MainPinSize.RADIUS));
 
   addAttributesCapacity(roomCountToAddDisabled, 'disabled');
   addAttributesCapacity(roomCountToAddSelected, 'selected');
@@ -120,4 +118,8 @@
     removeAttributesCapacity(roomCountToRemoveDisabled, 'disabled');
     removeAttributesCapacity(roomCountToRemoveSelected, 'selected');
   });
+
+  window.form = {
+    renderAddress: renderAddress
+  };
 }());

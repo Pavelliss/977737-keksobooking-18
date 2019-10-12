@@ -1,12 +1,10 @@
 'use strict';
 (function () {
-  window.data = {
-    MapRect: {
-      LEFT: 0,
-      TOP: 130,
-      RIGHT: 1200,
-      BOTTOM: 630
-    }
+  var MapRect = {
+    LEFT: 0,
+    TOP: 130,
+    RIGHT: 1200,
+    BOTTOM: 630
   };
 
   var PRICES = [100, 150, 200, 250, 300, 350, 400, 450];
@@ -49,10 +47,8 @@
   };
 
   var getAdvert = function (photoId) {
-    var locationX = getRandomNumber(window.data.MapRect.LEFT,
-        window.data.MapRect.RIGHT);
-    var locationY = getRandomNumber(window.data.MapRect.TOP,
-        window.data.MapRect.BOTTOM);
+    var locationX = getRandomNumber(MapRect.LEFT, MapRect.RIGHT);
+    var locationY = getRandomNumber(MapRect.TOP, MapRect.BOTTOM);
     return {
       'author': {
         'avatar': 'img/avatars/user0' + (photoId + 1) + '.png'

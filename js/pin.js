@@ -1,20 +1,13 @@
 'use strict';
 (function () {
-  window.pin = {
-    MainPinSize: {
-      RADIUS: 32,
-      HEIGHT: 80
-    },
-
-    getMainPinCoords: function (height) {
-      return {
-        x: window.mapPinMain.offsetLeft + window.pin.MainPinSize.RADIUS,
-        y: window.mapPinMain.offsetTop + height
-      };
-    }
+  var getMainPinCoords = function (height) {
+    return {
+      x: window.domRef.mapPinMain.offsetLeft + window.pin.MainPinSize.RADIUS,
+      y: window.domRef.mapPinMain.offsetTop + height
+    };
   };
 
-  window.mapPinMain.addEventListener('mousedown', function (evt) {
+  window.domRef.mapPinMain.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
 
     var startCords = {
@@ -39,15 +32,27 @@
         y: moveEvt.clientY
       };
 
-      if (startCords.x < window.data.MapRect.RIGHT + window.pin.MainPinSize.RADIUS
-        && startCords.x > window.data.MapRect.LEFT + window.pin.MainPinSize.RADIUS) {
-        window.mapPinMain.style.left = (window.mapPinMain.offsetLeft - shift.x) + 'px';
-      }
+      var pinToLimitX = {
+        pinMax: window.map.MapRect.RIGHT - window.pin.MainPinSize.RADIUS,
+        pinMin: window.map.MapRect.LEFT - window.pin.MainPinSize.RADIUS,
+        offsetValue: window.domRef.mapPinMain.offsetLeft - shift.x,
+      };
 
-      if (startCords.y < window.data.MapRect.BOTTOM
-        && startCords.y > window.data.MapRect.TOP) {
-        window.mapPinMain.style.top = (window.mapPinMain.offsetTop - shift.y) + 'px';
-      }
+      var pinToLimitY = {
+        pinMax: window.map.MapRect.BOTTOM,
+        pinMin: window.map.MapRect.TOP,
+        offsetValue: window.domRef.mapPinMain.offsetTop - shift.y,
+      };
+
+      var addLimitMove = function (pinObj) {
+        if (pinObj.offsetValue < pinObj.pinMax && pinObj.offsetValue > pinObj.pinMin) {
+          var newCordPin = pinObj.offsetValue + 'px';
+        }
+        return newCordPin;
+      };
+
+      window.domRef.mapPinMain.style.left = addLimitMove(pinToLimitX);
+      window.domRef.mapPinMain.style.top = addLimitMove(pinToLimitY);
     };
 
     var onMouseUp = function (upEvt) {
@@ -60,4 +65,13 @@
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
   });
+
+  window.pin = {
+    MainPinSize: {
+      RADIUS: 32,
+      HEIGHT: 80
+    },
+
+    getMainPinCoords: getMainPinCoords
+  };
 }());
