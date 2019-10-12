@@ -43,7 +43,7 @@
         pinMin: window.map.MapRect.TOP,
         offsetValue: window.domRef.mapPinMain.offsetTop - shift.y,
       };
-      //
+      // test
       var addLimitMove = function (pinObj) {
         if (pinObj.offsetValue < pinObj.pinMax && pinObj.offsetValue > pinObj.pinMin) {
           var newCordPin = pinObj.offsetValue + 'px';
