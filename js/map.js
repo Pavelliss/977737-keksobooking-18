@@ -1,6 +1,6 @@
 'use strict';
 (function () {
-  var map = document.querySelector('.map');
+  window.mapBlock = document.querySelector('.map');
   var adFormFieldsetList = window.domRef.adForm.querySelectorAll('fieldset');
   var filterForm = document.querySelector('.map__filters');
   var filterFormFieldsetList = filterForm.querySelectorAll('select');
@@ -23,10 +23,10 @@
 
   // Show map. filter and forms
   var showMapAndForm = function () {
-    map.classList.remove('map--faded');
+    window.mapBlock.classList.remove('map--faded');
     window.domRef.adForm.classList.remove('ad-form--disabled');
 
-    window.renderPins(window.offers);
+    window.load(window.card.renderPins);
     window.form.renderAddress(window.pin.getMainPinCoords(window.pin.MainPinSize.HEIGHT));
 
     window.domRef.mapPinMain.removeEventListener('mousedown', onMainPinMouseDown);
@@ -40,4 +40,9 @@
 
   addDisabledFildset(adFormFieldsetList, true);
   addDisabledFildset(filterFormFieldsetList, true);
+
+  window.map = {
+    onMainPinMouseDown: onMainPinMouseDown,
+    onMainPinEnterPress: onMainPinEnterPress
+  };
 }());

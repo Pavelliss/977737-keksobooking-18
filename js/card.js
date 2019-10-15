@@ -21,12 +21,14 @@
     return pin;
   };
 
-  window.renderPins = function (offers) {
-    var fragment = document.createDocumentFragment();
-    offers.forEach(function (offer) {
-      fragment.appendChild(renderPin(offer));
-    });
+  window.card = {
+    renderPins: function (offers) {
+      var fragment = document.createDocumentFragment();
+      offers.forEach(function (offer) {
+        fragment.appendChild(renderPin(offer));
+      });
 
-    mapPinsBlock.appendChild(fragment);
+      mapPinsBlock.appendChild(fragment);
+    }
   };
 }());
