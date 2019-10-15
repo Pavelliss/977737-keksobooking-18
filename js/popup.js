@@ -3,6 +3,11 @@
   var body = document.querySelector('body');
   var errorTemplate = document.querySelector('#error').content.querySelector('.error');
 
+  var onErrorButtonEscPress = function (evt) {
+    if (window.util.isEscKey(evt)) {
+      onErrorButton(evt);
+    }
+  };
 
   var onErrorButton = function (evt) {
     evt.preventDefault();
@@ -23,5 +28,7 @@
     errorButton.focus();
 
     errorButton.addEventListener('click', onErrorButton);
+    errorButton.addEventListener('keydown', onErrorButtonEscPress, {once: true});
   };
 })();
+
