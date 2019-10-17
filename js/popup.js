@@ -1,21 +1,18 @@
 'use strict';
 (function () {
-  var body = document.querySelector('body');
+  var main = document.querySelector('main');
   var errorTemplate = document.querySelector('#error').content.querySelector('.error');
 
   var onErrorButtonEscPress = function (evt) {
     if (window.util.isEscKey(evt)) {
-      onErrorButton(evt);
+      onErrorButtonClick(evt);
     }
   };
 
-  var onErrorButton = function (evt) {
+  var onErrorButtonClick = function (evt) {
     evt.preventDefault();
-    window.domRef.adForm.classList.add('ad-form--disabled');
-    window.mapBlock.classList.add('map--faded');
-    window.domRef.mapPinMain.addEventListener('mousedown', window.map.onMainPinMouseDown);
-    window.domRef.mapPinMain.addEventListener('keydown', window.map.onMainPinEnterPress);
-    body.removeChild(window.error);
+    window.page.deactivatePage();
+    main.removeChild(window.error);
   };
 
   window.errorHandler = function (errorMessage) {
@@ -24,11 +21,12 @@
     var errorButton = window.error.querySelector('.error__button');
 
     errorText.textContent = errorMessage;
-    body.appendChild(window.error);
+    main.appendChild(window.error);
     errorButton.focus();
 
-    errorButton.addEventListener('click', onErrorButton);
+    errorButton.addEventListener('click', onErrorButtonClick);
     errorButton.addEventListener('keydown', onErrorButtonEscPress, {once: true});
+    window.error.addEventListener('click', onErrorButtonClick);
   };
 })();
 
