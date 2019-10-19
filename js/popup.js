@@ -9,24 +9,26 @@
     }
   };
 
+  var errorBlock = null;
+
   var onErrorButtonClick = function (evt) {
     evt.preventDefault();
-    window.page.deactivatePage();
-    main.removeChild(window.error);
+    errorBlock.remove(); // удаляет элемент из DOM (браузер)
+    errorBlock = null; // удаляет элемент из памяти JS (движок языка)
   };
 
   window.errorHandler = function (errorMessage) {
-    window.error = errorTemplate.cloneNode(true);
-    var errorText = window.error.querySelector('.error__message');
-    var errorButton = window.error.querySelector('.error__button');
+    errorBlock = errorTemplate.cloneNode(true);
+    var errorText = errorBlock.querySelector('.error__message');
+    var errorButton = errorBlock.querySelector('.error__button');
 
     errorText.textContent = errorMessage;
-    main.appendChild(window.error);
+    main.appendChild(errorBlock);
     errorButton.focus();
 
     errorButton.addEventListener('click', onErrorButtonClick);
-    errorButton.addEventListener('keydown', onErrorButtonEscPress, {once: true});
-    window.error.addEventListener('click', onErrorButtonClick);
+    document.addEventListener('keydown', onErrorButtonEscPress, {once: true});
+    errorBlock.addEventListener('click', onErrorButtonClick);
   };
 })();
 

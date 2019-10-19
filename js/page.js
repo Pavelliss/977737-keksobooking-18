@@ -12,19 +12,26 @@
 
   // data = adverts
   var onDataLoad = function (adverts) {
-    window.card.renderPins(adverts);
+    if (adverts.length > 0) {
+      window.map.renderPins(adverts);
+      window.util.addDisabledFildset(window.domRef.filterFormFieldsetList, false);
+    }
+  };
+
+  var onDataLoadError = function (message) {
+    window.errorHandler(message);
   };
 
   var activatePage = function () {
     window.domRef.mapBlock.classList.remove('map--faded');
     window.domRef.adForm.classList.remove('ad-form--disabled');
 
-    window.load(onDataLoad);
-    window.form.renderAddress(window.pin.getMainPinCoords(window.pin.MainPinSize.HEIGHT));
+    window.load(onDataLoad, onDataLoadError);
+    window.form.renderAddress(window.mainPin.coords(window.mainPin.Size.HEIGHT));
 
     window.domRef.mapPinMain.removeEventListener('mousedown', onMainPinMouseDown);
     window.domRef.mapPinMain.removeEventListener('keydown', onMainPinEnterPress);
-    window.util.addDisabledFildset(window.domRefAdFormFieldsetList, false);
+    window.util.addDisabledFildset(window.domRef.adFormFieldsetList, false);
   };
 
   var deactivatePage = function () {
@@ -34,14 +41,20 @@
     window.domRef.mapPinMain.addEventListener('mousedown', window.page.onMainPinMouseDown);
     window.domRef.mapPinMain.addEventListener('keydown', window.page.onMainPinEnterPress);
 
-    window.util.addDisabledFildset(window.domRefAdFormFieldsetList, true);
+    window.util.addDisabledFildset(window.domRef.adFormFieldsetList, true);
     window.util.addDisabledFildset(window.domRef.filterFormFieldsetList, true);
   };
 
+  var onDomLoad = function () {
+    deactivatePage();
+  };
+
+  document.addEventListener('DOMContentLoaded', onDomLoad);
+
   window.page = {
-    activatePage: activatePage,
-    deactivatePage: deactivatePage,
+    activate: activatePage,
+    deactivate: deactivatePage,
     onMainPinMouseDown: onMainPinMouseDown,
-    onMainPinEnterPress: onMainPinEnterPress
+    onMainPinEnterPress: onMainPinEnterPress,
   };
 }());

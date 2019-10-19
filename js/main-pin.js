@@ -14,7 +14,7 @@
 
   var getMainPinCoords = function (height) {
     return {
-      x: window.domRef.mapPinMain.offsetLeft + window.pin.MainPinSize.RADIUS,
+      x: window.domRef.mapPinMain.offsetLeft + window.mainPin.Size.RADIUS,
       y: window.domRef.mapPinMain.offsetTop + height
     };
   };
@@ -49,7 +49,7 @@
     var onMouseMove = function (moveEvt) {
       moveEvt.preventDefault();
 
-      window.form.renderAddress(window.pin.getMainPinCoords(window.pin.MainPinSize.HEIGHT));
+      window.form.renderAddress(window.mainPin.coords(window.mainPin.Size.HEIGHT));
 
       // calculate the difference
       shift = {
@@ -69,7 +69,7 @@
 
       var pinToLimitY = {
         pinMax: MapRect.BOTTOM,
-        pinMin: MapRect.TOP,
+        pinMin: MapRect.TOP - window.mainPin.Size.HEIGHT / 2,
         offsetValue: window.domRef.mapPinMain.offsetTop,
       };
 
@@ -87,11 +87,11 @@
     document.addEventListener('mouseup', onMouseUp, {once: true});
   });
 
-  window.pin = {
-    MainPinSize: {
+  window.mainPin = {
+    Size: {
       RADIUS: 32,
       HEIGHT: 80
     },
-    getMainPinCoords: getMainPinCoords
+    coords: getMainPinCoords
   };
 }());

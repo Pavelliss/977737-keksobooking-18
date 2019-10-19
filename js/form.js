@@ -101,7 +101,7 @@
 
   timeField.addEventListener('change', onTimeChange);
 
-  renderAddress(window.pin.getMainPinCoords(window.pin.MainPinSize.RADIUS));
+  renderAddress(window.mainPin.coords(window.mainPin.Size.RADIUS));
 
   addAttributesCapacity(roomCountToAddDisabled, 'disabled');
   addAttributesCapacity(roomCountToAddSelected, 'selected');
