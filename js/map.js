@@ -1,43 +1,31 @@
 'use strict';
 (function () {
-  var map = document.querySelector('.map');
-  var adFormFieldsetList = window.domRef.adForm.querySelectorAll('fieldset');
-  var filterForm = document.querySelector('.map__filters');
-  var filterFormFieldsetList = filterForm.querySelectorAll('select');
-
-  var onMainPinMouseDown = function () {
-    showMapAndForm();
+  var PinSize = {
+    RADIUS: 25,
+    HEIGHT: 70
   };
 
-  var onMainPinEnterPress = function (evt) {
-    if (window.util.isEnterKey(evt)) {
-      showMapAndForm();
+  var mapPinsBlock = document.querySelector('.map__pins');
+  var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
+
+  // Pin creating
+  var renderPin = function (offer) {
+    var pin = pinTemplate.cloneNode(true);
+    var pinImage = pin.querySelector('img');
+
+    pinImage.alt = offer.offer.title;
+    pinImage.src = offer.author.avatar;
+    pin.style.left = (offer.location.x - PinSize.RADIUS) + 'px';
+    pin.style.top = (offer.location.y - PinSize.HEIGHT) + 'px';
+
+    return pin;
+  };
+
+  var getPinFragment = window.util.makeFragmentRender(renderPin);
+
+  window.map = {
+    renderPins: function (adverts) {
+      mapPinsBlock.appendChild(getPinFragment(adverts));
     }
   };
-
-  var addDisabledFildset = function (listElements, flag) {
-    listElements.forEach(function (fildset) {
-      fildset.disabled = flag;
-    });
-  };
-
-  // Show map. filter and forms
-  var showMapAndForm = function () {
-    map.classList.remove('map--faded');
-    window.domRef.adForm.classList.remove('ad-form--disabled');
-
-    window.renderPins(window.offers);
-    window.form.renderAddress(window.pin.getMainPinCoords(window.pin.MainPinSize.HEIGHT));
-
-    window.domRef.mapPinMain.removeEventListener('mousedown', onMainPinMouseDown);
-    window.domRef.mapPinMain.removeEventListener('keydown', onMainPinEnterPress);
-    addDisabledFildset(adFormFieldsetList, false);
-    addDisabledFildset(filterFormFieldsetList, false);
-  };
-
-  window.domRef.mapPinMain.addEventListener('mousedown', onMainPinMouseDown);
-  window.domRef.mapPinMain.addEventListener('keydown', onMainPinEnterPress);
-
-  addDisabledFildset(adFormFieldsetList, true);
-  addDisabledFildset(filterFormFieldsetList, true);
 }());

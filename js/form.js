@@ -1,7 +1,5 @@
 'use strict';
 (function () {
-  var LIST_TIMES = ['12:00', '13:00', '14:00'];
-
   var offerTypeToMinPrice = {
     'bungalo': '0',
     'flat': '1000',
@@ -44,6 +42,7 @@
   var selectRoomNumber = window.domRef.adForm.querySelector('#room_number');
   var selectCapacity = window.domRef.adForm.querySelector('#capacity');
   var optionsCapacitys = selectCapacity.querySelectorAll('option');
+  var timeField = window.domRef.adForm.querySelector('.ad-form__element--time');
 
   var renderAddress = function (coords) {
     adFormAddress.value = coords.x + ', ' + coords.y;
@@ -56,12 +55,13 @@
   };
 
   // synchronizes time between timein and timeout
-  var synchronizeArrivalTime = function (timeList, checkElement, changeElement) {
-    timeList.forEach(function (element) {
-      if (checkElement.value === element) {
-        changeElement.value = element;
-      }
-    });
+  var syncTime = function (time) {
+    selectTimein.value = time;
+    selectTimeout.value = time;
+  };
+
+  var onTimeChange = function (evt) {
+    syncTime(evt.target.value);
   };
 
   // add atribute for capacity list
@@ -99,15 +99,9 @@
     setOffersPrice(minPrice);
   });
 
-  selectTimein.addEventListener('change', function () {
-    synchronizeArrivalTime(LIST_TIMES, selectTimein, selectTimeout);
-  });
+  timeField.addEventListener('change', onTimeChange);
 
-  selectTimeout.addEventListener('change', function () {
-    synchronizeArrivalTime(LIST_TIMES, selectTimeout, selectTimein);
-  });
-
-  renderAddress(window.pin.getMainPinCoords(window.pin.MainPinSize.RADIUS));
+  renderAddress(window.mainPin.getCoords(window.mainPin.Size.RADIUS));
 
   addAttributesCapacity(roomCountToAddDisabled, 'disabled');
   addAttributesCapacity(roomCountToAddSelected, 'selected');
