@@ -21,14 +21,11 @@
     return pin;
   };
 
-  window.map = {
-    renderPins: function (offers) {
-      var fragment = document.createDocumentFragment();
-      offers.forEach(function (offer) {
-        fragment.appendChild(renderPin(offer));
-      });
+  var getPinFragment = window.util.makeFragmentRender(renderPin);
 
-      mapPinsBlock.appendChild(fragment);
+  window.map = {
+    renderPins: function (adverts) {
+      mapPinsBlock.appendChild(getPinFragment(adverts));
     }
   };
 }());

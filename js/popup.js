@@ -3,9 +3,15 @@
   var main = document.querySelector('main');
   var errorTemplate = document.querySelector('#error').content.querySelector('.error');
 
+  var removeErrorBlock = function () {
+    errorBlock.remove(); // удаляет элемент из DOM (браузер)
+    errorBlock = null; // удаляет элемент из памяти JS (движок языка)
+    document.removeEventListener('keydown', onErrorButtonEscPress);
+  };
+
   var onErrorButtonEscPress = function (evt) {
     if (window.util.isEscKey(evt)) {
-      onErrorButtonClick(evt);
+      removeErrorBlock();
     }
   };
 
@@ -13,8 +19,7 @@
 
   var onErrorButtonClick = function (evt) {
     evt.preventDefault();
-    errorBlock.remove(); // удаляет элемент из DOM (браузер)
-    errorBlock = null; // удаляет элемент из памяти JS (движок языка)
+    removeErrorBlock();
   };
 
   window.errorHandler = function (errorMessage) {
@@ -27,7 +32,7 @@
     errorButton.focus();
 
     errorButton.addEventListener('click', onErrorButtonClick);
-    document.addEventListener('keydown', onErrorButtonEscPress, {once: true});
+    document.addEventListener('keydown', onErrorButtonEscPress);
     errorBlock.addEventListener('click', onErrorButtonClick);
   };
 })();

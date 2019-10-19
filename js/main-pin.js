@@ -70,6 +70,6 @@
 
   window.mainPin = {
     Size: MainPinSize,
-    coords: getMainPinCoords,
+    getCoords: getMainPinCoords,
   };
 }());

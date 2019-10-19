@@ -27,7 +27,7 @@
     window.domRef.adForm.classList.remove('ad-form--disabled');
 
     window.load(onDataLoad, onDataLoadError);
-    window.form.renderAddress(window.mainPin.coords(window.mainPin.Size.HEIGHT));
+    window.form.renderAddress(window.mainPin.getCoords(window.mainPin.Size.HEIGHT));
 
     window.domRef.mapPinMain.removeEventListener('mousedown', onMainPinMouseDown);
     window.domRef.mapPinMain.removeEventListener('keydown', onMainPinEnterPress);
