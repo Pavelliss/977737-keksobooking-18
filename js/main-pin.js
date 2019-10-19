@@ -1,80 +1,61 @@
 'use strict';
 (function () {
-  var MainPinPointer = {
-    MAX_CORD: 1168,
-    MIN_CORD: -32
-  };
-
   var MapRect = {
     LEFT: 0,
     TOP: 130,
     RIGHT: 1200,
-    BOTTOM: 630
+    BOTTOM: 630,
   };
+
+  var MainPinSize = {
+    RADIUS: 32,
+    HEIGHT: 80,
+  };
+
+  var MainPinRect = {
+    LEFT: MapRect.LEFT - MainPinSize.RADIUS,
+    RIGHT: MapRect.RIGHT - MainPinSize.RADIUS,
+    TOP: MapRect.TOP - MainPinSize.HEIGHT,
+    BOTTOM: MapRect.BOTTOM - MainPinSize.HEIGHT,
+  };
+
+  var mainPin = window.domRef.mapPinMain;
 
   var getMainPinCoords = function (height) {
     return {
-      x: window.domRef.mapPinMain.offsetLeft + window.mainPin.Size.RADIUS,
-      y: window.domRef.mapPinMain.offsetTop + height
+      x: mainPin.offsetLeft + MainPinSize.RADIUS,
+      y: mainPin.offsetTop + height,
     };
   };
 
-  var renderMainPin = function (direction, cord) {
-    var cordPinValue = window.domRef.mapPinMain.style[direction] = cord;
-    return cordPinValue;
+  var getMainPinOffset = function (x, y) {
+    return {
+      x: Math.min(Math.max(x, MainPinRect.LEFT), MainPinRect.RIGHT),
+      y: Math.min(Math.max(y, MainPinRect.TOP), MainPinRect.BOTTOM),
+    };
   };
 
-  var addLimitMove = function (properties, shiftPin) {
-    var offsetPin = properties.offsetValue - shiftPin;
-    if (offsetPin <= properties.pinMax
-     && offsetPin >= properties.pinMin) {
-      return offsetPin + 'px';
-    }
-    return undefined;
+  var renderMainPinPos = function (coords) {
+    mainPin.style.left = coords.x + 'px';
+    mainPin.style.top = coords.y + 'px';
   };
 
-  window.domRef.mapPinMain.addEventListener('mousedown', function (evt) {
+  mainPin.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
 
-    var startCords = {
-      x: evt.clientX,
-      y: evt.clientY
-    };
-
-    var shift = {
-      x: startCords.x,
-      y: startCords.y
+    var startCoords = {
+      x: mainPin.offsetLeft,
+      y: mainPin.offsetTop,
     };
 
     var onMouseMove = function (moveEvt) {
       moveEvt.preventDefault();
 
-      window.form.renderAddress(window.mainPin.coords(window.mainPin.Size.HEIGHT));
+      var x = startCoords.x + moveEvt.clientX - evt.clientX;
+      var y = startCoords.y + moveEvt.clientY - evt.clientY;
 
-      // calculate the difference
-      shift = {
-        x: startCords.x - moveEvt.clientX,
-        y: startCords.y - moveEvt.clientY
-      };
-
-      // update coords
-      startCords.x = moveEvt.clientX;
-      startCords.y = moveEvt.clientY;
-
-      var pinToLimitX = {
-        pinMax: MainPinPointer.MAX_CORD,
-        pinMin: MainPinPointer.MIN_CORD,
-        offsetValue: window.domRef.mapPinMain.offsetLeft,
-      };
-
-      var pinToLimitY = {
-        pinMax: MapRect.BOTTOM,
-        pinMin: MapRect.TOP - window.mainPin.Size.HEIGHT / 2,
-        offsetValue: window.domRef.mapPinMain.offsetTop,
-      };
-
-      renderMainPin('left', addLimitMove(pinToLimitX, shift.x));
-      renderMainPin('top', addLimitMove(pinToLimitY, shift.y));
+      renderMainPinPos(getMainPinOffset(x, y));
+      window.form.renderAddress(getMainPinCoords(MainPinSize.HEIGHT));
     };
 
     var onMouseUp = function (upEvt) {
@@ -88,10 +69,7 @@
   });
 
   window.mainPin = {
-    Size: {
-      RADIUS: 32,
-      HEIGHT: 80
-    },
-    coords: getMainPinCoords
+    Size: MainPinSize,
+    coords: getMainPinCoords,
   };
 }());
