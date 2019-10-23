@@ -15,10 +15,7 @@
   var makeFragmentRender = function (render) {
     return function getFragment(values) {
       var fragment = document.createDocumentFragment();
-      values.forEach(function (value, i) {
-        if (i > 4) {
-          return;
-        }
+      values.forEach(function (value) {
         fragment.appendChild(render(value));
       });
 

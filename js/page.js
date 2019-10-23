@@ -1,5 +1,7 @@
 'use strict';
 (function () {
+  var ADVERT_NUM = 5;
+
   var onMainPinMouseDown = function () {
     activatePage();
   };
@@ -10,10 +12,16 @@
     }
   };
 
+  var cropPinList = function (list) {
+    var shortList = list.slice(0, ADVERT_NUM);
+    return shortList;
+  };
+
   // data = adverts
   var onDataLoad = function (adverts) {
     if (adverts.length > 0) {
-      window.map.renderPins(adverts);
+      window.dataPins = adverts;
+      window.map.renderPins(cropPinList(adverts));
       window.util.addDisabledFildset(window.domRef.filterFormFieldsetList, false);
     }
   };
@@ -56,5 +64,6 @@
     deactivate: deactivatePage,
     onMainPinMouseDown: onMainPinMouseDown,
     onMainPinEnterPress: onMainPinEnterPress,
+    cropPinList: cropPinList,
   };
 }());

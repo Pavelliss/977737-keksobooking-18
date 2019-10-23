@@ -13,7 +13,6 @@
     xhr.addEventListener('load', function () {
       if (xhr.status === Status.OK) {
         onSuccess(xhr.response);
-        window.dataPins = xhr.response;
       } else {
         onError('Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
       }
