@@ -22,6 +22,7 @@
     if (adverts.length > 0) {
       window.dataPins = adverts;
       window.map.renderPins(cropPinList(adverts));
+      window.card.renderCards(adverts);
       window.util.addDisabledFildset(window.domRef.filterFormFieldsetList, false);
     }
   };

@@ -9,14 +9,14 @@
   var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 
   // Pin creating
-  var renderPin = function (offer) {
+  var renderPin = function (offerPin) {
     var pin = pinTemplate.cloneNode(true);
     var pinImage = pin.querySelector('img');
 
-    pinImage.alt = offer.offer.title;
-    pinImage.src = offer.author.avatar;
-    pin.style.left = (offer.location.x - PinSize.RADIUS) + 'px';
-    pin.style.top = (offer.location.y - PinSize.HEIGHT) + 'px';
+    pinImage.alt = offerPin.offer.title;
+    pinImage.src = offerPin.author.avatar;
+    pin.style.left = (offerPin.location.x - PinSize.RADIUS) + 'px';
+    pin.style.top = (offerPin.location.y - PinSize.HEIGHT) + 'px';
 
     return pin;
   };
