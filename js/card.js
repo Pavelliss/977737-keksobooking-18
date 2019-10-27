@@ -44,7 +44,6 @@
     var cardTime = card.querySelector('.popup__text--time');
     var cardDescription = card.querySelector('.popup__description');
     var cardPhotos = card.querySelector('.popup__photos');
-    var cardFeatures = card.querySelector('.popup__features');
     var cardFeature = card.querySelectorAll('.popup__feature');
 
     cardTitle.textContent = offerCard.offer.title;
@@ -58,9 +57,7 @@
     cardDescription.textContent = offerCard.offer.description;
     cardAvatar.src = offerCard.author.avatar;
     getAddressPhoto(offerCard.offer.photos, cardPhotos);
-
-    removeFeature(offerCard.offer.features, cardFeature, cardFeatures);
-
+    removeFeature(offerCard.offer.features, cardFeature);
     return card;
   };
 
