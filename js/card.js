@@ -13,14 +13,14 @@
   };
 
   var removeFeature = function (featureList, elements) {
-    for (var i = 0; i < elements.length; i++) {
-      var className = elements[i].className;
+    elements.forEach(function (element) {
+      var className = element.className;
       className = className.slice(FEATURE_CLASS_REMOVE, className.length);
       var status = featureList.includes(className);
       if (status === false) {
-        elements[i].remove();
+        element.remove();
       }
-    }
+    });
   };
 
   var getAddressPhoto = function (addressList, element) {
@@ -44,7 +44,8 @@
     var cardTime = card.querySelector('.popup__text--time');
     var cardDescription = card.querySelector('.popup__description');
     var cardPhotos = card.querySelector('.popup__photos');
-    var cardFeatures = card.querySelectorAll('.popup__feature');
+    var cardFeatures = card.querySelector('.popup__features');
+    var cardFeature = card.querySelectorAll('.popup__feature');
 
     cardTitle.textContent = offerCard.offer.title;
     cardAddress.textContent = offerCard.offer.address;
@@ -57,7 +58,8 @@
     cardDescription.textContent = offerCard.offer.description;
     cardAvatar.src = offerCard.author.avatar;
     getAddressPhoto(offerCard.offer.photos, cardPhotos);
-    removeFeature(offerCard.offer.features, cardFeatures);
+
+    removeFeature(offerCard.offer.features, cardFeature, cardFeatures);
 
     return card;
   };
