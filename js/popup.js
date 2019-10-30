@@ -3,15 +3,17 @@
   var main = document.querySelector('main');
   var errorTemplate = document.querySelector('#error').content.querySelector('.error');
 
-  var removeErrorBlock = function () {
-    errorBlock.remove(); // удаляет элемент из DOM (браузер)
-    errorBlock = null; // удаляет элемент из памяти JS (движок языка)
-    document.removeEventListener('keydown', onErrorButtonEscPress);
+  var removeBlock = function (block, onEscPress) {
+    block.remove();
+    block = null;
+    document.removeEventListener('keydown', onEscPress);
   };
+
+  // Error popup
 
   var onErrorButtonEscPress = function (evt) {
     if (window.util.isEscKey(evt)) {
-      removeErrorBlock();
+      removeBlock(errorBlock, onErrorButtonEscPress);
     }
   };
 
@@ -19,7 +21,7 @@
 
   var onErrorButtonClick = function (evt) {
     evt.preventDefault();
-    removeErrorBlock();
+    removeBlock(errorBlock, onErrorButtonEscPress);
   };
 
   window.errorHandler = function (errorMessage) {
@@ -34,6 +36,31 @@
     errorButton.addEventListener('click', onErrorButtonClick);
     document.addEventListener('keydown', onErrorButtonEscPress);
     errorBlock.addEventListener('click', onErrorButtonClick);
+  };
+
+  // Card popup
+
+  var closeCard = function () {
+    var cardBlock = window.domRef.mapBlock.querySelector('.map__card');
+    var cardCloseButton = cardBlock.querySelector('.popup__close');
+
+    var onCloseButtonEscPress = function (evt) {
+      if (window.util.isEscKey(evt)) {
+        removeBlock(cardBlock, onCloseButtonEscPress);
+      }
+    };
+
+    var onCloseButtonClick = function () {
+      removeBlock(cardBlock, onCloseButtonEscPress);
+    };
+
+    cardCloseButton.addEventListener('click', onCloseButtonClick);
+    document.addEventListener('keydown', onCloseButtonEscPress);
+  };
+
+
+  window.popup = {
+    closeCard: closeCard,
   };
 })();
 
