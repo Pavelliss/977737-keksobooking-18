@@ -23,6 +23,18 @@
     };
   };
 
+  var makeTemplateGenerator = function (generator) {
+    return function getTemplate(values) {
+      return values.map(generator).join('');
+    };
+  };
+
+  var removeBlock = function (block, onEscPress) {
+    block.remove();
+    block = null;
+    document.removeEventListener('keydown', onEscPress);
+  };
+
   window.util = {
     isEnterKey: function (evt) {
       return evt.key === KeyboardKey.ENTER;
@@ -32,6 +44,8 @@
       || evt.key === KeyboardKey.ESCAPE_IE;
     },
     addDisabledFildset: addDisabledFildset,
-    makeFragmentRender: makeFragmentRender
+    makeFragmentRender: makeFragmentRender,
+    makeTemplateGenerator: makeTemplateGenerator,
+    removeBlock: removeBlock,
   };
 }());

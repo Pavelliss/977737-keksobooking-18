@@ -26,21 +26,8 @@
     return '<img src="' + url + '" class="popup__photo" width="45" height="40" alt="Фотография жилья"></img>';
   };
 
-  var makeTemplateGenerator = function (generator) {
-    return function getTemplate(values) {
-      return values.map(generator).join('');
-    };
-  };
-
-  var checkListLength = function (list, block, funRender) {
-    if (list.length === 0) {
-      block.remove();
-    }
-    block.innerHTML = funRender(list);
-  };
-
-  var getFeatureTemplate = makeTemplateGenerator(getFeatureMarkup);
-  var getPhotoTemplate = makeTemplateGenerator(getPhotoMarkup);
+  var getFeatureTemplate = window.util.makeTemplateGenerator(getFeatureMarkup);
+  var getPhotoTemplate = window.util.makeTemplateGenerator(getPhotoMarkup);
 
   var renderCard = function (advert) {
     var card = cardTemplate.cloneNode(true);
@@ -57,9 +44,8 @@
     var offer = advert.offer;
     card.querySelector('.popup__text--capacity').textContent = getOfferRoom(offer);
     card.querySelector('.popup__text--time').textContent = getOfferTime(offer);
-    checkListLength(offer.photos, cardPhotos, getPhotoTemplate);
-    checkListLength(offer.features, cardFeatures, getFeatureTemplate);
-
+    cardPhotos.innerHTML = offer.photos.length > 0 ? getPhotoTemplate(offer.photos) : '';
+    cardFeatures.innerHTML = offer.features.length > 0 ? getFeatureTemplate(offer.features) : '';
     cardAvatar.src = advert.author.avatar;
     cardTitle.textContent = offer.title;
     cardAddress.textContent = offer.address;
@@ -67,14 +53,39 @@
     cardTypeHousing.textContent = offerTypeEnToRu[offer.type];
     cardDescription.textContent = offer.description;
 
+    card.classList.add('.map__pin--active');
+
     return card;
   };
 
-  var renderOffer = function (adverts) {
+  var showCard = function (adverts) {
+    var cardBlock = window.domRef.mapBlock.querySelector('.map__card');
+    if (cardBlock) {
+      cardBlock.remove();
+    }
     mapFilterContainer.before(renderCard(adverts));
   };
 
+  var closeCard = function () {
+    var cardBlock = window.domRef.mapBlock.querySelector('.map__card');
+    var cardCloseButton = cardBlock.querySelector('.popup__close');
+
+    var onCloseButtonEscPress = function (evt) {
+      if (window.util.isEscKey(evt)) {
+        window.util.removeBlock(cardBlock, onCloseButtonEscPress);
+      }
+    };
+
+    var onCloseButtonClick = function () {
+      window.util.removeBlock(cardBlock, onCloseButtonEscPress);
+    };
+
+    cardCloseButton.addEventListener('click', onCloseButtonClick);
+    document.addEventListener('keydown', onCloseButtonEscPress);
+  };
+
   window.card = {
-    renderOffer: renderOffer,
+    show: showCard,
+    close: closeCard,
   };
 })();

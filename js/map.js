@@ -19,8 +19,8 @@
     pin.style.top = (advert.location.y - PinSize.HEIGHT) + 'px';
 
     pin.addEventListener('click', function () {
-      window.card.renderOffer(advert);
-      window.popup.closeCard();
+      window.card.show(advert);
+      window.card.close();
     });
 
     return pin;
