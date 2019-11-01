@@ -27,7 +27,7 @@
   };
 
   var onDataLoadError = function (message) {
-    window.errorHandler(message);
+    window.message.showError(message);
   };
 
   var activatePage = function () {

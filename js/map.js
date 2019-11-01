@@ -9,14 +9,19 @@
   var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 
   // Pin creating
-  var renderPin = function (offer) {
+  var renderPin = function (advert) {
     var pin = pinTemplate.cloneNode(true);
     var pinImage = pin.querySelector('img');
 
-    pinImage.alt = offer.offer.title;
-    pinImage.src = offer.author.avatar;
-    pin.style.left = (offer.location.x - PinSize.RADIUS) + 'px';
-    pin.style.top = (offer.location.y - PinSize.HEIGHT) + 'px';
+    pinImage.alt = advert.offer.title;
+    pinImage.src = advert.author.avatar;
+    pin.style.left = (advert.location.x - PinSize.RADIUS) + 'px';
+    pin.style.top = (advert.location.y - PinSize.HEIGHT) + 'px';
+
+    pin.addEventListener('click', function () {
+      window.card.show(advert);
+      pin.classList.add('map__pin--active');
+    });
 
     return pin;
   };
@@ -29,3 +34,4 @@
     }
   };
 }());
+
