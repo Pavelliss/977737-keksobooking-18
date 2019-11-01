@@ -20,7 +20,7 @@
 
     pin.addEventListener('click', function () {
       window.card.show(advert);
-      window.card.close();
+      pin.classList.add('map__pin--active');
     });
 
     return pin;
@@ -34,3 +34,4 @@
     }
   };
 }());
+

@@ -14,6 +14,7 @@
     var optionValue = evt.target.value;
     var pinList = window.dataPins;
     deletePins();
+    window.card.close();
     if (optionValue !== 'any') {
       pinList = window.getFilterTypes(window.dataPins, optionValue);
     }

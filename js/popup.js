@@ -18,7 +18,7 @@
     window.util.removeBlock(errorBlock, onErrorButtonEscPress);
   };
 
-  var errorHandler = function (errorMessage) {
+  var showError = function (errorMessage) {
     errorBlock = errorTemplate.cloneNode(true);
     var errorText = errorBlock.querySelector('.error__message');
     var errorButton = errorBlock.querySelector('.error__button');
@@ -32,8 +32,8 @@
     errorBlock.addEventListener('click', onErrorButtonClick);
   };
 
-  window.popup = {
-    errorHandler: errorHandler,
+  window.message = {
+    showError: showError,
   };
 })();
 

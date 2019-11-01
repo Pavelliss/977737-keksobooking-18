@@ -35,6 +35,20 @@
     document.removeEventListener('keydown', onEscPress);
   };
 
+  var pluralize = function (num, one, two, five) {
+    var mod100 = Math.abs(num % 100);
+    if (mod100 > 10 && mod100 < 20) {
+      return five;
+    }
+
+    var mod10 = mod100 % 10;
+    if (mod10 > 1 && mod10 < 5) {
+      return two;
+    }
+
+    return mod10 === 1 ? one : five;
+  };
+
   window.util = {
     isEnterKey: function (evt) {
       return evt.key === KeyboardKey.ENTER;
@@ -47,5 +61,6 @@
     makeFragmentRender: makeFragmentRender,
     makeTemplateGenerator: makeTemplateGenerator,
     removeBlock: removeBlock,
+    pluralize: pluralize,
   };
 }());
