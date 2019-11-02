@@ -110,8 +110,9 @@
   };
 
   adForm.addEventListener('submit', function (evt) {
+    var data = new FormData(adForm);
     evt.preventDefault();
-    window.upload(new FormData(adForm), onDataUploadSuccess(adForm));
+    window.loadOffer(window.load.urlPost, data, onDataUploadSuccess(adForm));
   });
 
   buttonReset.addEventListener('click', function () {
