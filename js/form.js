@@ -34,15 +34,17 @@
     '100': [0, 1, 2]
   };
 
-  var inputPrice = window.domRef.adForm.querySelector('#price');
-  var adFormAddress = window.domRef.adForm.querySelector('#address');
-  var selectTypeHose = window.domRef.adForm.querySelector('#type');
-  var selectTimein = window.domRef.adForm.querySelector('#timein');
-  var selectTimeout = window.domRef.adForm.querySelector('#timeout');
-  var selectRoomNumber = window.domRef.adForm.querySelector('#room_number');
-  var selectCapacity = window.domRef.adForm.querySelector('#capacity');
+  var adForm = window.domRef.adForm;
+  var inputPrice = adForm.querySelector('#price');
+  var adFormAddress = adForm.querySelector('#address');
+  var selectTypeHose = adForm.querySelector('#type');
+  var selectTimein = adForm.querySelector('#timein');
+  var selectTimeout = adForm.querySelector('#timeout');
+  var selectRoomNumber = adForm.querySelector('#room_number');
+  var selectCapacity = adForm.querySelector('#capacity');
   var optionsCapacitys = selectCapacity.querySelectorAll('option');
-  var timeField = window.domRef.adForm.querySelector('.ad-form__element--time');
+  var timeField = adForm.querySelector('.ad-form__element--time');
+  var buttonReset = adForm.querySelector('.ad-form__reset');
 
   var renderAddress = function (coords) {
     adFormAddress.value = coords.x + ', ' + coords.y;
@@ -93,6 +95,28 @@
       }
     });
   };
+
+  var onDataUploadSuccess = function (form) {
+    window.message.showSuccess();
+    resetForm(form);
+  };
+
+  var resetForm = function (form) {
+    window.page.deactivate();
+    form.reset();
+    window.util.deletePins();
+    window.mainPin.resetCord();
+    renderAddress(window.mainPin.getCoords(window.mainPin.Size.RADIUS));
+  };
+
+  adForm.addEventListener('submit', function (evt) {
+    evt.preventDefault();
+    window.upload(new FormData(adForm), onDataUploadSuccess(adForm));
+  });
+
+  buttonReset.addEventListener('click', function () {
+    resetForm(adForm);
+  });
 
   selectTypeHose.addEventListener('change', function (evt) {
     var minPrice = offerTypeToMinPrice[evt.target.value];

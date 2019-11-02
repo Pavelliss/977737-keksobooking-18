@@ -19,6 +19,7 @@
     pin.style.top = (advert.location.y - PinSize.HEIGHT) + 'px';
 
     pin.addEventListener('click', function () {
+      window.card.close();
       window.card.show(advert);
       pin.classList.add('map__pin--active');
     });

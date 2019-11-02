@@ -2,6 +2,8 @@
 (function () {
   var main = document.querySelector('main');
   var errorTemplate = document.querySelector('#error').content.querySelector('.error');
+  var successTemplate = document.querySelector('#success').
+                        content.querySelector('.success');
 
   // Error popup
 
@@ -32,8 +34,32 @@
     errorBlock.addEventListener('click', onErrorButtonClick);
   };
 
+  // success popup
+  var successBlock = null;
+
+  var onSuccesButtonClick = function (evt) {
+    evt.preventDefault();
+    window.util.removeBlock(successBlock, onSuccesButtonClick);
+  };
+
+  var onSuccesButtonEscPress = function (evt) {
+    if (window.util.isEscKey(evt)) {
+      window.util.removeBlock(successBlock, onSuccesButtonEscPress);
+    }
+  };
+
+  var showSuccess = function () {
+    successBlock = successTemplate.cloneNode(true);
+
+    main.appendChild(successBlock);
+
+    successBlock.addEventListener('click', onSuccesButtonClick);
+    document.addEventListener('keydown', onSuccesButtonEscPress);
+  };
+
   window.message = {
     showError: showError,
+    showSuccess: showSuccess,
   };
 })();
 
