@@ -102,12 +102,8 @@
   };
 
   var resetForm = function () {
-    window.page.deactivate();
+    window.page.rollbackPage();
     adForm.reset();
-    window.domRef.mapFilters.reset();
-    window.map.deletePins();
-    window.mainPin.resetCoords();
-    window.card.close();
     renderAddress(window.mainPin.getCoords(window.mainPin.Size.RADIUS));
   };
 

@@ -57,6 +57,14 @@
     deactivatePage();
   };
 
+  var rollbackPage = function () {
+    deactivatePage();
+    window.map.deletePins();
+    window.mainPin.resetCoords();
+    window.card.close();
+    window.domRef.mapFilters.reset();
+  };
+
   document.addEventListener('DOMContentLoaded', onDomLoad);
 
   window.page = {
@@ -65,5 +73,6 @@
     onMainPinMouseDown: onMainPinMouseDown,
     onMainPinEnterPress: onMainPinEnterPress,
     cropPinList: cropPinList,
+    rollbackPage: rollbackPage,
   };
 }());
