@@ -57,7 +57,7 @@
     document.addEventListener('keydown', onSuccesButtonEscPress);
   };
 
-  window.message = {
+  window.popup = {
     showError: showError,
     showSuccess: showSuccess,
   };

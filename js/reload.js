@@ -5,7 +5,7 @@
   var onFilterChange = function (evt) {
     var optionValue = evt.target.value;
     var pinList = window.dataPins;
-    window.util.deletePins();
+    window.map.deletePins();
     window.card.close();
     if (optionValue !== 'any') {
       pinList = window.getFilterTypes(window.dataPins, optionValue);

@@ -35,31 +35,31 @@
   };
 
   var adForm = window.domRef.adForm;
-  var inputPrice = adForm.querySelector('#price');
-  var adFormAddress = adForm.querySelector('#address');
-  var selectTypeHose = adForm.querySelector('#type');
-  var selectTimein = adForm.querySelector('#timein');
-  var selectTimeout = adForm.querySelector('#timeout');
-  var selectRoomNumber = adForm.querySelector('#room_number');
-  var selectCapacity = adForm.querySelector('#capacity');
-  var optionsCapacitys = selectCapacity.querySelectorAll('option');
+  var priceInput = adForm.querySelector('#price');
+  var addressInput = adForm.querySelector('#address');
+  var typeHoseSelect = adForm.querySelector('#type');
+  var timeinSelect = adForm.querySelector('#timein');
+  var timeoutSelect = adForm.querySelector('#timeout');
+  var roomNumberSelect = adForm.querySelector('#room_number');
+  var capacitySelect = adForm.querySelector('#capacity');
+  var capacitysOptions = capacitySelect.querySelectorAll('option');
   var timeField = adForm.querySelector('.ad-form__element--time');
-  var buttonReset = adForm.querySelector('.ad-form__reset');
+  var resetButton = adForm.querySelector('.ad-form__reset');
 
   var renderAddress = function (coords) {
-    adFormAddress.value = coords.x + ', ' + coords.y;
+    addressInput.value = coords.x + ', ' + coords.y;
   };
 
   // Show map. filter and forms
   var setOffersPrice = function (price) {
-    inputPrice.min = price;
-    inputPrice.placeholder = price;
+    priceInput.min = price;
+    priceInput.placeholder = price;
   };
 
   // synchronizes time between timein and timeout
   var syncTime = function (time) {
-    selectTimein.value = time;
-    selectTimeout.value = time;
+    timeinSelect.value = time;
+    timeoutSelect.value = time;
   };
 
   var onTimeChange = function (evt) {
@@ -71,11 +71,11 @@
     var keysList = Object.keys(objAttributes); // ['1', '2', '3', '100']
 
     keysList.forEach(function (keysListElement) {
-      if (selectRoomNumber.value === keysListElement) { // '1'
+      if (roomNumberSelect.value === keysListElement) { // '1'
         var elementIndexList = objAttributes[keysListElement]; // [0, 1, 3]
 
         elementIndexList.forEach(function (elementIndex) {
-          optionsCapacitys[elementIndex][attribute] = true;
+          capacitysOptions[elementIndex][attribute] = true;
         });
       }
     });
@@ -86,40 +86,50 @@
     var keysList = Object.keys(objAttributes); // ['1', '2', '3', '100']
 
     keysList.forEach(function (keysListElement) {
-      if (selectRoomNumber.value === keysListElement) { // '1'
+      if (roomNumberSelect.value === keysListElement) { // '1'
         var elementList = objAttributes[keysListElement]; // [2]
 
         elementList.forEach(function (elementIndex) {
-          optionsCapacitys[elementIndex][attribute] = false;
+          capacitysOptions[elementIndex][attribute] = false;
         });
       }
     });
   };
 
-  var onDataUploadSuccess = function (form) {
-    window.message.showSuccess();
-    resetForm(form);
+  var onDataUploadSuccess = function () {
+    window.popup.showSuccess();
+    resetForm();
   };
 
-  var resetForm = function (form) {
+  var resetForm = function () {
     window.page.deactivate();
-    form.reset();
-    window.util.deletePins();
-    window.mainPin.resetCord();
+    adForm.reset();
+    window.domRef.mapFilters.reset();
+    window.map.deletePins();
+    window.mainPin.resetCoords();
+    window.card.close();
     renderAddress(window.mainPin.getCoords(window.mainPin.Size.RADIUS));
+  };
+
+  var onDataUploadError = function (message) {
+    window.popup.showError(message);
   };
 
   adForm.addEventListener('submit', function (evt) {
     var data = new FormData(adForm);
     evt.preventDefault();
-    window.loadOffer(window.load.urlPost, data, onDataUploadSuccess(adForm));
+    window.load.makeRequest(
+        window.load.urlPost,
+        data,
+        onDataUploadSuccess,
+        onDataUploadError);
   });
 
-  buttonReset.addEventListener('click', function () {
-    resetForm(adForm);
+  resetButton.addEventListener('click', function () {
+    resetForm();
   });
 
-  selectTypeHose.addEventListener('change', function (evt) {
+  typeHoseSelect.addEventListener('change', function (evt) {
     var minPrice = offerTypeToMinPrice[evt.target.value];
     setOffersPrice(minPrice);
   });
@@ -131,7 +141,7 @@
   addAttributesCapacity(roomCountToAddDisabled, 'disabled');
   addAttributesCapacity(roomCountToAddSelected, 'selected');
 
-  selectRoomNumber.addEventListener('change', function () {
+  roomNumberSelect.addEventListener('change', function () {
     addAttributesCapacity(roomCountToAddDisabled, 'disabled');
     addAttributesCapacity(roomCountToAddSelected, 'selected');
     removeAttributesCapacity(roomCountToRemoveDisabled, 'disabled');

@@ -49,13 +49,6 @@
     return mod10 === 1 ? one : five;
   };
 
-  var deletePins = function () {
-    var mapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
-    mapPins.forEach(function (pin) {
-      pin.remove();
-    });
-  };
-
   window.util = {
     isEnterKey: function (evt) {
       return evt.key === KeyboardKey.ENTER;
@@ -69,6 +62,5 @@
     makeTemplateGenerator: makeTemplateGenerator,
     removeBlock: removeBlock,
     pluralize: pluralize,
-    deletePins: deletePins,
   };
 }());

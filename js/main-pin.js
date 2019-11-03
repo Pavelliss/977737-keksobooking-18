@@ -19,7 +19,7 @@
     BOTTOM: MapRect.BOTTOM - MainPinSize.HEIGHT,
   };
 
-  var DefaultCards = {
+  var DefaultCoord = {
     X: 570,
     Y: 375
   };
@@ -73,14 +73,14 @@
     document.addEventListener('mouseup', onMouseUp, {once: true});
   });
 
-  var resetCord = function () {
-    mainPin.style.left = DefaultCards.X + 'px';
-    mainPin.style.top = DefaultCards.Y + 'px';
+  var resetCoords = function () {
+    mainPin.style.left = DefaultCoord.X + 'px';
+    mainPin.style.top = DefaultCoord.Y + 'px';
   };
 
   window.mainPin = {
     Size: MainPinSize,
     getCoords: getMainPinCoords,
-    resetCord: resetCord,
+    resetCoords: resetCoords,
   };
 }());

@@ -7,7 +7,7 @@
     OK: 200
   };
 
-  var addLoadListener = function (xhr, onSuccess, onError) {
+  var addRequesListener = function (xhr, onSuccess, onError) {
     xhr.timeout = TIMEOUT;
 
     xhr.addEventListener('load', function () {
@@ -25,18 +25,16 @@
     });
   };
 
-  window.loadOffer = function (url, data, onSuccess, onError) {
+  var makeRequest = function (url, data, onSuccess, onError) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
-    if (data !== null) {
-      xhr.addEventListener('load', onSuccess);
+    addRequesListener(xhr, onSuccess, onError);
 
+    if (data !== null) {
       xhr.open('POST', url);
       xhr.send(data);
     } else {
-      addLoadListener(xhr, onSuccess, onError);
-
       xhr.open('GET', url);
       xhr.send();
     }
@@ -45,5 +43,6 @@
   window.load = {
     urlGet: URL_LOAD,
     urlPost: URL_UPLOAD,
+    makeRequest: makeRequest,
   };
 })();

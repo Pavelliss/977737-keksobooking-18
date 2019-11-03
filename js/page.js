@@ -27,14 +27,14 @@
   };
 
   var onDataLoadError = function (message) {
-    window.message.showError(message);
+    window.popup.showError(message);
   };
 
   var activatePage = function () {
     window.domRef.mapBlock.classList.remove('map--faded');
     window.domRef.adForm.classList.remove('ad-form--disabled');
 
-    window.loadOffer(window.load.urlGet, null, onDataLoad, onDataLoadError);
+    window.load.makeRequest(window.load.urlGet, null, onDataLoad, onDataLoadError);
     window.form.renderAddress(window.mainPin.getCoords(window.mainPin.Size.HEIGHT));
 
     window.domRef.mapPinMain.removeEventListener('mousedown', onMainPinMouseDown);
