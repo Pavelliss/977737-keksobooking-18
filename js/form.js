@@ -50,6 +50,7 @@
     addressInput.value = coords.x + ', ' + coords.y;
   };
 
+
   // Show map. filter and forms
   var setOffersPrice = function (price) {
     priceInput.min = price;
@@ -124,6 +125,8 @@
   resetButton.addEventListener('click', function () {
     resetForm();
   });
+
+  setOffersPrice(offerTypeToMinPrice[typeHoseSelect.value]);
 
   typeHoseSelect.addEventListener('change', function (evt) {
     var minPrice = offerTypeToMinPrice[evt.target.value];
