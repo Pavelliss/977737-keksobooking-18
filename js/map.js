@@ -19,6 +19,7 @@
     pin.style.top = (advert.location.y - PinSize.HEIGHT) + 'px';
 
     pin.addEventListener('click', function () {
+      window.card.close();
       window.card.show(advert);
       pin.classList.add('map__pin--active');
     });
@@ -26,12 +27,23 @@
     return pin;
   };
 
+  var removeElement = function (element) {
+    element.remove();
+  };
+
+  var deletePins = function () {
+    var mapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+    mapPins.forEach(removeElement);
+  };
+
+  var renderPins = function (adverts) {
+    mapPinsBlock.appendChild(getPinFragment(adverts));
+  };
+
   var getPinFragment = window.util.makeFragmentRender(renderPin);
 
   window.map = {
-    renderPins: function (adverts) {
-      mapPinsBlock.appendChild(getPinFragment(adverts));
-    }
+    renderPins: renderPins,
+    deletePins: deletePins,
   };
 }());
-

@@ -19,6 +19,11 @@
     BOTTOM: MapRect.BOTTOM - MainPinSize.HEIGHT,
   };
 
+  var DefaultCoord = {
+    X: 570,
+    Y: 375
+  };
+
   var mainPin = window.domRef.mapPinMain;
 
   var getMainPinCoords = function (height) {
@@ -68,8 +73,14 @@
     document.addEventListener('mouseup', onMouseUp, {once: true});
   });
 
+  var resetCoords = function () {
+    mainPin.style.left = DefaultCoord.X + 'px';
+    mainPin.style.top = DefaultCoord.Y + 'px';
+  };
+
   window.mainPin = {
     Size: MainPinSize,
     getCoords: getMainPinCoords,
+    resetCoords: resetCoords,
   };
 }());

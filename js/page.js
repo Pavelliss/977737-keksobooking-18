@@ -27,14 +27,14 @@
   };
 
   var onDataLoadError = function (message) {
-    window.message.showError(message);
+    window.popup.showError(message);
   };
 
   var activatePage = function () {
     window.domRef.mapBlock.classList.remove('map--faded');
     window.domRef.adForm.classList.remove('ad-form--disabled');
 
-    window.load(onDataLoad, onDataLoadError);
+    window.load.makeRequest(window.load.urlGet, null, onDataLoad, onDataLoadError);
     window.form.renderAddress(window.mainPin.getCoords(window.mainPin.Size.HEIGHT));
 
     window.domRef.mapPinMain.removeEventListener('mousedown', onMainPinMouseDown);
@@ -57,6 +57,14 @@
     deactivatePage();
   };
 
+  var rollbackPage = function () {
+    deactivatePage();
+    window.map.deletePins();
+    window.mainPin.resetCoords();
+    window.card.close();
+    window.domRef.mapFilters.reset();
+  };
+
   document.addEventListener('DOMContentLoaded', onDomLoad);
 
   window.page = {
@@ -65,5 +73,6 @@
     onMainPinMouseDown: onMainPinMouseDown,
     onMainPinEnterPress: onMainPinEnterPress,
     cropPinList: cropPinList,
+    rollbackPage: rollbackPage,
   };
 }());
