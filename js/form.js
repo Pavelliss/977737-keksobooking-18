@@ -50,7 +50,6 @@
     addressInput.value = coords.x + ', ' + coords.y;
   };
 
-
   // Show map. filter and forms
   var setOffersPrice = function (price) {
     priceInput.min = price;
