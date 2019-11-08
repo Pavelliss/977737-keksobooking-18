@@ -1,13 +1,24 @@
 'use strict';
 (function () {
   var Price = {
-    MIDDLE_MIN: 10000,
-    MIDDLE_MAX: 50000,
     LOW: 10000,
-    NIGH: 50000
+    HIGH: 50000
   };
 
-  var filtersData = function (listOption, getFilter) {
+  var priceToFilter = {
+    low: function (price) {
+      return price <= Price.LOW;
+    },
+    middle: function (price) {
+      return price >= Price.LOW &&
+             price <= Price.HIGH;
+    },
+    high: function (price) {
+      return price >= Price.HIGH;
+    }
+  };
+
+  var checkData = function (listOption, getFilter) {
     return listOption.filter(getFilter);
   };
 
@@ -20,43 +31,25 @@
   // Price
   var getPrice = function (option) {
     var elementValue = window.reload.priceSelect.value;
-    var condition = null;
-    switch (elementValue) {
-      case 'middle':
-        condition = option.offer.price >= Price.MIDDLE_MIN &&
-                    option.offer.price <= Price.MIDDLE_MAX;
-        break;
-      case 'low':
-        condition = option.offer.price < Price.LOW;
-        break;
-      case 'high':
-        condition = option.offer.price > Price.NIGH;
-        break;
-    }
-    return condition;
+    return priceToFilter[elementValue](option.offer.price);
   };
 
   // Rooms
   var getRoom = function (option) {
-    var roomValue = Number(window.reload.roomSelect.value);
+    var roomValue = +window.reload.roomSelect.value;
     return option.offer.rooms === roomValue;
   };
 
   // Guest
   var getGues = function (option) {
-    var guesValue = Number(window.reload.guestSelect.value);
+    var guesValue = +window.reload.guestSelect.value;
     return option.offer.rooms === guesValue;
   };
 
-  // check active checkbox
   var checkFeature = function (advert, userFeatures) {
     var featureList = advert.offer.features;
-    var status = null;
-    userFeatures.forEach(function (userFeature) {
-      var index = featureList.indexOf(userFeature);
-      if (index === -1) {
-        status = false;
-      }
+    var status = userFeatures.every(function (userFeature) {
+      return featureList.indexOf(userFeature) !== -1;
     });
     return status;
   };
@@ -65,7 +58,7 @@
   var filterFeatures = function (adverts, userFeatures) {
     var pinList = [];
     adverts.forEach(function (advert) {
-      if (checkFeature(advert, userFeatures) !== false) {
+      if (checkFeature(advert, userFeatures)) {
         pinList.push(advert);
       }
     });
@@ -73,7 +66,7 @@
   };
 
   window.filter = {
-    filtersData: filtersData,
+    checkData: checkData,
     getType: getType,
     getPrice: getPrice,
     getRoom: getRoom,

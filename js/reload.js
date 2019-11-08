@@ -23,7 +23,7 @@
 
   var checkOption = function (dataList, option, fn) {
     if (option.value !== 'any') {
-      dataList = window.filter.filtersData(dataList, fn);
+      dataList = window.filter.checkData(dataList, fn);
     }
     return dataList;
   };
