@@ -1,76 +1,60 @@
 'use strict';
 (function () {
-  var Price = {
+  var HousePrice = {
     LOW: 10000,
     HIGH: 50000
   };
 
   var priceToFilter = {
     low: function (price) {
-      return price <= Price.LOW;
+      return price <= HousePrice.LOW;
     },
     middle: function (price) {
-      return price >= Price.LOW &&
-             price <= Price.HIGH;
+      return price >= HousePrice.LOW &&
+             price <= HousePrice.HIGH;
     },
     high: function (price) {
-      return price >= Price.HIGH;
+      return price >= HousePrice.HIGH;
     }
   };
 
-  var checkData = function (listOption, getFilter) {
-    return listOption.filter(getFilter);
+  var checkType = function (advert) {
+    return window.reload.housingSelect.value === 'any'
+    || window.reload.housingSelect.value === advert.offer.type;
   };
 
-  // Housing
-  var getType = function (option) {
-    var housingValue = window.reload.housingSelect.value;
-    return option.offer.type === housingValue;
+  var checkPrice = function (advert) {
+    var priceValue = window.reload.priceSelect.value;
+    return window.reload.priceSelect.value === 'any'
+    || priceToFilter[priceValue](advert.offer.price);
   };
 
-  // Price
-  var getPrice = function (option) {
-    var elementValue = window.reload.priceSelect.value;
-    return priceToFilter[elementValue](option.offer.price);
+  var checkRoom = function (advert) {
+    return window.reload.roomSelect.value === 'any'
+    || +window.reload.roomSelect.value === advert.offer.rooms;
   };
 
-  // Rooms
-  var getRoom = function (option) {
-    var roomValue = +window.reload.roomSelect.value;
-    return option.offer.rooms === roomValue;
+  var checkGuest = function (advert) {
+    return window.reload.guestSelect.value === 'any'
+    || +window.reload.guestSelect.value === advert.offer.guests;
   };
 
-  // Guest
-  var getGues = function (option) {
-    var guesValue = +window.reload.guestSelect.value;
-    return option.offer.rooms === guesValue;
-  };
-
-  var checkFeature = function (advert, userFeatures) {
-    var featureList = advert.offer.features;
-    var status = userFeatures.every(function (userFeature) {
-      return featureList.indexOf(userFeature) !== -1;
+  var checkCheckbox = function (advert) {
+    var checkboxs = window.reload.getCheckboxList();
+    return checkboxs.every(function (userFeature) {
+      return advert.offer.features.indexOf(userFeature) !== -1;
     });
-    return status;
   };
 
-  // features
-  var filterFeatures = function (adverts, userFeatures) {
-    var pinList = [];
-    adverts.forEach(function (advert) {
-      if (checkFeature(advert, userFeatures)) {
-        pinList.push(advert);
-      }
-    });
-    return pinList;
+  var filterAdverts = function (advert) {
+    return checkType(advert)
+        && checkPrice(advert)
+        && checkRoom(advert)
+        && checkGuest(advert)
+        && checkCheckbox(advert);
   };
 
   window.filter = {
-    checkData: checkData,
-    getType: getType,
-    getPrice: getPrice,
-    getRoom: getRoom,
-    getGues: getGues,
-    features: filterFeatures
+    adverts: filterAdverts,
   };
 })();

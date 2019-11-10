@@ -1,6 +1,5 @@
 'use strict';
 (function () {
-  var listSelects = window.domRef.mapFilters.querySelectorAll('.map__filter');
   var featureCheckboxs = window.domRef.mapFilters.querySelectorAll('.map__checkbox');
   var housingSelect = window.domRef.mapFilters.querySelector('#housing-type');
   var priceSelect = window.domRef.mapFilters.querySelector('#housing-price');
@@ -21,38 +20,21 @@
     return userFeatures;
   };
 
-  var checkOption = function (dataList, option, fn) {
-    if (option.value !== 'any') {
-      dataList = window.filter.checkData(dataList, fn);
-    }
-    return dataList;
-  };
-
   var onFilterChange = window.util.debounce(function () {
-    var pinList = window.dataPins;
+    var dataPins = window.dataPins;
     window.map.deletePins();
     window.card.close();
-    pinList = checkOption(pinList, housingSelect, window.filter.getType);
-    pinList = checkOption(pinList, priceSelect, window.filter.getPrice);
-    pinList = checkOption(pinList, roomSelect, window.filter.getRoom);
-    pinList = checkOption(pinList, guestSelect, window.filter.getGues);
-    pinList = window.filter.features(pinList, getCheckboxList());
-
-    updatePins(pinList);
+    var filteredAdverts = dataPins.filter(window.filter.adverts);
+    updatePins(filteredAdverts);
   });
 
-  listSelects.forEach(function (select) {
-    select.addEventListener('change', onFilterChange);
-  });
-
-  featureCheckboxs.forEach(function (checkbox) {
-    checkbox.addEventListener('change', onFilterChange);
-  });
+  window.domRef.mapFilters.addEventListener('change', onFilterChange);
 
   window.reload = {
     housingSelect: housingSelect,
     priceSelect: priceSelect,
     roomSelect: roomSelect,
     guestSelect: guestSelect,
+    getCheckboxList: getCheckboxList,
   };
 })();
