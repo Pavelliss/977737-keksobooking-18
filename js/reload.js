@@ -7,7 +7,7 @@
   var guestSelect = window.domRef.mapFilters.querySelector('#housing-guests');
 
   var updatePins = function (dataPins) {
-    window.map.renderPins(window.page.cropPinList(dataPins));
+    window.map.renderPins(window.page.cropPins(dataPins));
   };
 
   var getCheckboxList = function () {
@@ -24,8 +24,9 @@
     var dataPins = window.dataPins;
     window.map.deletePins();
     window.card.close();
-    var filteredAdverts = dataPins.filter(window.filter.adverts);
-    updatePins(filteredAdverts);
+    window.checkboxs = getCheckboxList();
+    var getfilteredAdverts = dataPins.filter(window.filter.adverts);
+    updatePins(getfilteredAdverts);
   });
 
   window.domRef.mapFilters.addEventListener('change', onFilterChange);

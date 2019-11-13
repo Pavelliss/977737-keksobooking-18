@@ -30,7 +30,7 @@
     errorButton.focus();
 
     errorButton.addEventListener('click', onErrorButtonClick);
-    document.addEventListener('keydown', onErrorButtonEscPress);
+    window.addEventListener('keydown', onErrorButtonEscPress);
     errorBlock.addEventListener('click', onErrorButtonClick);
   };
 
@@ -54,7 +54,7 @@
     main.appendChild(successBlock);
 
     successBlock.addEventListener('click', onSuccesButtonClick);
-    document.addEventListener('keydown', onSuccesButtonEscPress);
+    window.addEventListener('keydown', onSuccesButtonEscPress);
   };
 
   window.popup = {

@@ -7,7 +7,7 @@
 
   var priceToFilter = {
     low: function (price) {
-      return price <= HousePrice.LOW;
+      return price < HousePrice.LOW;
     },
     middle: function (price) {
       return price >= HousePrice.LOW &&
@@ -40,8 +40,7 @@
   };
 
   var checkCheckbox = function (advert) {
-    var checkboxs = window.reload.getCheckboxList();
-    return checkboxs.every(function (userFeature) {
+    return window.checkboxs.every(function (userFeature) {
       return advert.offer.features.indexOf(userFeature) !== -1;
     });
   };

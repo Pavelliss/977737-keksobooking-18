@@ -12,17 +12,17 @@
     }
   };
 
-  var cropPinList = function (list) {
-    var shortList = list.slice(0, ADVERT_NUM);
-    return shortList;
+  var cropPins = function (list) {
+    var shorts = list.slice(0, ADVERT_NUM);
+    return shorts;
   };
 
   // data = adverts
   var onDataLoad = function (adverts) {
     if (adverts.length > 0) {
       window.dataPins = adverts;
-      window.map.renderPins(cropPinList(adverts));
-      window.util.addDisabledFildset(window.domRef.filterFormFieldsetList, false);
+      window.map.renderPins(cropPins(adverts));
+      window.util.addDisabledFildset(window.domRef.filterFormFieldsets, false);
     }
   };
 
@@ -39,7 +39,7 @@
 
     window.domRef.mapPinMain.removeEventListener('mousedown', onMainPinMouseDown);
     window.domRef.mapPinMain.removeEventListener('keydown', onMainPinEnterPress);
-    window.util.addDisabledFildset(window.domRef.adFormFieldsetList, false);
+    window.util.addDisabledFildset(window.domRef.adFormFieldsets, false);
   };
 
   var deactivatePage = function () {
@@ -49,8 +49,8 @@
     window.domRef.mapPinMain.addEventListener('mousedown', window.page.onMainPinMouseDown);
     window.domRef.mapPinMain.addEventListener('keydown', window.page.onMainPinEnterPress);
 
-    window.util.addDisabledFildset(window.domRef.adFormFieldsetList, true);
-    window.util.addDisabledFildset(window.domRef.filterFormFieldsetList, true);
+    window.util.addDisabledFildset(window.domRef.adFormFieldsets, true);
+    window.util.addDisabledFildset(window.domRef.filterFormFieldsets, true);
   };
 
   var onDomLoad = function () {
@@ -72,7 +72,7 @@
     deactivate: deactivatePage,
     onMainPinMouseDown: onMainPinMouseDown,
     onMainPinEnterPress: onMainPinEnterPress,
-    cropPinList: cropPinList,
+    cropPins: cropPins,
     rollbackPage: rollbackPage,
   };
 }());
