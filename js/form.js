@@ -105,6 +105,7 @@
     window.page.rollbackPage();
     adForm.reset();
     renderAddress(window.mainPin.getCoords(window.mainPin.Size.RADIUS));
+    window.avatarPhotos.resetFileInput();
   };
 
   var onDataUploadError = function (message) {

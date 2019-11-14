@@ -10,23 +10,27 @@
     window.map.renderPins(window.page.cropPins(dataPins));
   };
 
-  var getCheckboxList = function () {
-    var userFeatures = [];
-    featureCheckboxs.forEach(function (feature) {
-      if (feature.checked) {
-        userFeatures.push(feature.value);
-      }
-    });
-    return userFeatures;
+  var reduce = Array.prototype.reduce;
+
+  var reduceFeatures = function (checkedFeatures, feature) {
+    if (feature.checked) {
+      checkedFeatures.push(feature.value);
+    }
+    return checkedFeatures;
+  };
+
+  var getCheckedFeatures = function () {
+    return reduce.call(featureCheckboxs, reduceFeatures, []);
   };
 
   var onFilterChange = window.util.debounce(function () {
     var dataPins = window.dataPins;
     window.map.deletePins();
     window.card.close();
-    window.checkboxs = getCheckboxList();
-    var getfilteredAdverts = dataPins.filter(window.filter.adverts);
-    updatePins(getfilteredAdverts);
+    window.checkboxs = getCheckedFeatures();
+    var filteredAdverts = dataPins.filter(window.filter.adverts);
+    updatePins(filteredAdverts);
+    window.checkboxs = null;
   });
 
   window.domRef.mapFilters.addEventListener('change', onFilterChange);
@@ -36,6 +40,5 @@
     priceSelect: priceSelect,
     roomSelect: roomSelect,
     guestSelect: guestSelect,
-    getCheckboxList: getCheckboxList,
   };
 })();

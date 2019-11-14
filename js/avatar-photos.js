@@ -1,49 +1,51 @@
 'use strict';
 (function () {
   var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+  var DEFAULT_URL_AVATAR = 'img/muffin-grey.svg';
 
   var avatarImage = window.domRef.adForm.querySelector('.ad-form-header__preview img');
-  var avatarFile = window.domRef.adForm.querySelector('#avatar');
-  var photoFile = window.domRef.adForm.querySelector('#images');
   var photoImage = window.domRef.adForm.querySelector('.ad-form__photo');
+  var avatarInput = window.domRef.adForm.querySelector('#avatar');
+  var photoInput = window.domRef.adForm.querySelector('#images');
 
-  var getUserFile = function (elementFile) {
-    var file = elementFile.files[0];
-    var fileName = file.name.toLowerCase();
-
-    var checkExtension = FILE_TYPES.some(function (type) {
-      return fileName.endsWith(type);
+  var isFileExtension = function (file) {
+    return FILE_TYPES.some(function (type) {
+      return file.name.endsWith(type);
     });
+  };
 
-    if (!checkExtension) {
-      return undefined;
+  var onInputFileChange = function (evt) {
+    var fileInput = evt.target;
+    var file = fileInput.files[0];
+
+    if (isFileExtension(file)) {
+      var reader = new FileReader();
+
+      reader.addEventListener('load', function () {
+        var result = reader.result;
+        switch (fileInput) {
+          case avatarInput:
+            avatarImage.src = result;
+            break;
+          case photoInput:
+            photoImage.style.backgroundImage = 'url(' + result + ')';
+            photoImage.style.backgroundSize = 'cover';
+            break;
+        }
+      });
+      reader.readAsDataURL(file);
     }
-    return file;
   };
 
-  var onInputFileChange = function () {
-    var file = getUserFile(avatarFile);
-    var reader = new FileReader();
-
-    reader.addEventListener('load', function () {
-      avatarImage.src = reader.result;
-    });
-
-    reader.readAsDataURL(file);
+  var resetFileInput = function () {
+    avatarImage.src = DEFAULT_URL_AVATAR;
+    photoImage.removeAttribute('style');
   };
 
-  var onInputPhotoChange = function () {
-    var file = getUserFile(photoFile);
-    var reader = new FileReader();
+  avatarInput.addEventListener('change', onInputFileChange);
+  photoInput.addEventListener('change', onInputFileChange);
 
-    reader.addEventListener('load', function () {
-      photoImage.style.backgroundImage = 'url(' + reader.result + ')';
-      photoImage.style.backgroundSize = 'cover';
-    });
-
-    reader.readAsDataURL(file);
+  window.avatarPhotos = {
+    resetFileInput: resetFileInput,
   };
-
-  avatarFile.addEventListener('change', onInputFileChange);
-  photoFile.addEventListener('change', onInputPhotoChange);
 })();
