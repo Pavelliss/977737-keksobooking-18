@@ -8,8 +8,8 @@
     ESCAPE_IE: 'Esc'
   };
 
-  var addDisabledFildset = function (listElements, flag) {
-    listElements.forEach(function (fildset) {
+  var addDisabledFildset = function (elements, flag) {
+    elements.forEach(function (fildset) {
       fildset.disabled = flag;
     });
   };
@@ -26,15 +26,20 @@
   };
 
   var makeTemplateGenerator = function (generator) {
+    var reduceValues = function (template, value) {
+      template += generator(value);
+      return template;
+    };
+
     return function getTemplate(values) {
-      return values.map(generator).join('');
+      return values.reduce(reduceValues, '');
     };
   };
 
   var removeBlock = function (block, onEscPress) {
     block.remove();
     block = null;
-    document.removeEventListener('keydown', onEscPress);
+    window.removeEventListener('keydown', onEscPress);
   };
 
   var pluralize = function (num, one, two, five) {

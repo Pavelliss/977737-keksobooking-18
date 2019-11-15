@@ -68,28 +68,28 @@
 
   // add atribute for capacity list
   var addAttributesCapacity = function (objAttributes, attribute) {
-    var keysList = Object.keys(objAttributes); // ['1', '2', '3', '100']
+    var keys = Object.keys(objAttributes); // ['1', '2', '3', '100']
 
-    keysList.forEach(function (keysListElement) {
-      if (roomNumberSelect.value === keysListElement) { // '1'
-        var elementIndexList = objAttributes[keysListElement]; // [0, 1, 3]
+    keys.forEach(function (keysElement) {
+      if (roomNumberSelect.value === keysElement) { // '1'
+        var elementIndexes = objAttributes[keysElement]; // [0, 1, 3]
 
-        elementIndexList.forEach(function (elementIndex) {
+        elementIndexes.forEach(function (elementIndex) {
           capacitysOptions[elementIndex][attribute] = true;
         });
       }
     });
   };
 
-  // remove atribute for capacity list
+  // remove atribute for capacity elementIndexes
   var removeAttributesCapacity = function (objAttributes, attribute) {
-    var keysList = Object.keys(objAttributes); // ['1', '2', '3', '100']
+    var keys = Object.keys(objAttributes); // ['1', '2', '3', '100']
 
-    keysList.forEach(function (keysListElement) {
-      if (roomNumberSelect.value === keysListElement) { // '1'
-        var elementList = objAttributes[keysListElement]; // [2]
+    keys.forEach(function (keysElement) {
+      if (roomNumberSelect.value === keysElement) { // '1'
+        var elements = objAttributes[keysElement]; // [2]
 
-        elementList.forEach(function (elementIndex) {
+        elements.forEach(function (elementIndex) {
           capacitysOptions[elementIndex][attribute] = false;
         });
       }
@@ -105,6 +105,7 @@
     window.page.rollbackPage();
     adForm.reset();
     renderAddress(window.mainPin.getCoords(window.mainPin.Size.RADIUS));
+    window.avatarPhotos.resetFileInput();
   };
 
   var onDataUploadError = function (message) {
